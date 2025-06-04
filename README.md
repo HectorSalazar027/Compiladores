@@ -7,15 +7,30 @@ Este proyecto proporciona un **analizador léxico y sintáctico interactivo** co
 ## 📁 Estructura del Proyecto
 
 ```
-├── server.py           # Backend en Flask (léxico y sintáctico)
-├── parser.py           # Parser con generación de AST
-├── index.html          # Interfaz web con botones interactivos
-├── main.js             # Lógica frontend (análisis, temas, UI)
-├── /css                # Estilos opcionales
-├── /images             # Imágenes de fondo, íconos, etc.
+├── backend
+│   ├── Lexer_Analyzer.py           # Analizador léxico (línea de comandos)
+│   ├── parser.py                   # Parser con generación de AST
+│   ├── server.py                   # API Flask (léxico y sintaxis)
+│   ├── IniciarSesion.py            # Módulo adicional (seguridad)
+│   ├── GeneradorDeContraseñas.py   # Módulo adicional (seguridad)
+│   └── __pycache__/                # Archivos compilados
+│
+├── frontend
+│   ├── css
+│   │   └── styles.css              # Estilos personalizados
+│   ├── images
+│   │   ├── github.png              # Ícono GitHub
+│   │   └── Solano.jpg              # Imagen decorativa
+│   ├── js
+│   │   ├── main.js                 # Lógica de interfaz
+│   │   └── particles.min.js        # Efecto de partículas
+│   └── index.html                  # Interfaz principal
+│
+└── README.md                       # Documentación del proyecto
 ```
 
 ---
+
 
 ## 🚀 Cómo Ejecutar
 

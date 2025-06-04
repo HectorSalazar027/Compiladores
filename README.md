@@ -73,12 +73,11 @@ Abre `frontend/index.html` en tu navegador.
 - **Análisis Léxico**:
   - Reconocimiento de: `KEYWORD`, `LITERAL`, `CONSTANT`, `IDENTIFIER`, `OPERATOR`, `PUNCTUATION`
 - **Análisis Sintáctico**:
-  - Construcción del AST con nodos: funciones, ciclos, condiciones, expresiones, llamadas, listas
+  - Construcción del AST con nodos: funciones, ciclos, condiciones, expresiones, llamadas de funciones, listas
 - **Interfaz Web**:
   - Tema claro/oscuro
   - Soporte para carga de archivos `.py`, `.js`, `.cpp`, `.txt`
   - Ejemplo precargado
-  - Exportación de resultados
 
 ---
 
@@ -110,8 +109,8 @@ pip install flask flask-cors
 
 ## 👨‍💻 Colaboradores
 
+- [Héctor Salazar](https://github.com/HectorSalazar027)
 - [Josue Elizalde](https://github.com/JosJim275)
 - [Santiago Medina](https://github.com/sntg-mdn)
-- [Héctor Salazar](https://github.com/HectorSalazar027)
 - [David Tavera](https://github.com/DavidT328)
 - [Jesus Tenorio](https://github.com/JysusAle)

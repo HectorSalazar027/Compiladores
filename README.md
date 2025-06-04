@@ -1,96 +1,69 @@
-# 🧠 Analizador Léxico Interactivo
+# 🧠 Analizador Léxico y Sintáctico Interactivo
 
-Este proyecto proporciona un **analizador léxico interactivo** con interfaz web, capaz de reconocer y clasificar tokens básicos de código fuente escrito en Python. Puedes usarlo desde línea de comandos o a través de una interfaz web estilizada con TailwindCSS.
+Este proyecto proporciona un **analizador léxico y sintáctico interactivo** con interfaz web. Permite reconocer y clasificar tokens de código Python, así como construir un árbol de sintaxis abstracta (AST). Es accesible desde la línea de comandos o a través de una interfaz web estilizada con TailwindCSS.
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
-├── Lexer_Analyzer.py     # Analizador léxico en consola
-├── server.py             # Backend con Flask para API REST
-├── index.html            # Interfaz web del analizador
-├── script.js             # Lógica de frontend y consumo de API
-├── /css                  # Estilos personalizados (referenciado)
-├── /images               # Imágenes usadas en la UI (como el logo)
+├── server.py           # Backend en Flask (léxico y sintáctico)
+├── parser.py           # Parser con generación de AST
+├── index.html          # Interfaz web con botones interactivos
+├── main.js             # Lógica frontend (análisis, temas, UI)
+├── /css                # Estilos opcionales
+├── /images             # Imágenes de fondo, íconos, etc.
 ```
 
 ---
 
-## 🚀 Cómo ejecutar
+## 🚀 Cómo Ejecutar
 
-### Opción 1: Usar desde consola (Python puro)
-
-```bash
-python Lexer_Analyzer.py archivo.py
-```
-
-Esto mostrará los tokens clasificados por tipo y el total encontrado.
-
----
-
-### Opción 2: Interfaz Web
-
-#### 1. Instala las dependencias
-Se recomienda usar un entorno virtual:
-
-```bash
-pip install flask flask-cors
-```
-
-#### 2. Ejecuta el servidor
+### Opción 1: Consola (solo léxico)
 
 ```bash
 python server.py
 ```
 
-Esto abrirá una API REST en `http://localhost:5000`.
+Puedes hacer peticiones a la API desde herramientas como Postman o curl:
+
+```bash
+curl -X POST http://localhost:5000/analyze -H "Content-Type: application/json" -d '{"code": "def suma(a, b): return a + b", "mode": "lex"}'
+```
+
+### Opción 2: Interfaz Web
+
+#### 1. Instala las dependencias
+
+```bash
+pip install flask flask-cors
+```
+
+#### 2. Ejecuta el backend
+
+```bash
+python server.py
+```
+
+Esto abrirá la API en `http://localhost:5000`.
 
 #### 3. Abre `index.html` en tu navegador
 
-Solo abre el archivo en tu navegador (no requiere servidor web para el frontend). Asegúrate de que el backend esté corriendo para que la interfaz funcione.
-
----
-
-## 🛠 Requisitos y Dependencias
-
-### Python
-- Python 3.6 o superior
-- Bibliotecas:
-  - `flask`
-  - `flask-cors`
-
-Instalación recomendada:
-
-```bash
-pip install -r requirements.txt
-```
-
-Contenido sugerido para `requirements.txt`:
-```
-flask
-flask-cors
-```
-
-### Navegador
-- Cualquier navegador moderno (se recomienda Chrome o Firefox)
+Solo abre el archivo directamente. La interfaz usará el backend si está corriendo.
 
 ---
 
 ## 🧪 Funcionalidades
 
-- Clasificación de tokens:
-  - `KEYWORD` (`def`, `return`, etc.)
-  - `LITERAL` (cadenas de texto)
-  - `CONSTANT` (números enteros o flotantes)
-  - `IDENTIFIER` (nombres de variables y funciones)
-  - `OPERATOR` (`+`, `-`, `==`, etc.)
-  - `PUNCTUATION` (`{`, `}`, `(`, `)`, etc.)
-
-- Interfaz intuitiva
-- Soporte de tema claro/oscuro
-- Carga de archivos `.py`, `.txt`, `.js`, `.cpp`
-- Código de ejemplo con un clic
+- **Análisis Léxico**:
+  - `KEYWORD`, `LITERAL`, `CONSTANT`, `IDENTIFIER`, `OPERATOR`, `PUNCTUATION`
+- **Análisis Sintáctico**:
+  - Construcción de árbol de sintaxis (AST)
+  - Soporte para funciones, asignaciones, condicionales, ciclos y llamadas
+- Interfaz moderna con modo claro/oscuro
+- Carga de archivos `.py`, `.js`, `.cpp`, `.txt`
+- Código de ejemplo precargado
+- Copiar y descargar resultados
 
 ---
 
@@ -101,5 +74,3 @@ flask-cors
 - [Héctor Salazar](https://github.com/HectorSalazar027)
 - [David Tavera](https://github.com/DavidT328)
 - [Jesus Tenorio](https://github.com/JysusAle)
-
-

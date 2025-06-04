@@ -1,0 +1,267 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+
+.scaled-content {
+  transform: scale(0.75);
+  transform-origin: top center;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+
+.central-container {
+    transform: scale(1);
+    transform-origin: top center;
+    max-width: 64rem;
+    /* equivalente a Tailwind's max-w-4xl */
+    margin: 0 auto;
+    margin-top: 20%;
+}
+
+#particles-js {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0 120px, black 120px 100%);
+    mask-image: linear-gradient(to bottom, transparent 0 120px, black 120px 100%);
+}
+
+
+body {
+    flex: 1;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+    padding: 2rem 0;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+header {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+
+#output {
+    min-height: 250px;
+    /* puedes ajustar el valor (px, vh, etc.) */
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    overflow-y: auto;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode #output {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-color: #444;
+}
+
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+}
+
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.titulo-grande {
+    font-size: 40px;
+}
+
+:root {
+    --bg-dark: #111827;
+    --text-dark: #ffffff;
+    --bg-light: #f9f9f9;
+    --text-light: #111827;
+}
+
+body.dark-mode {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+body.light-mode {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+}
+
+.floating-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+    background: #388E3C;
+}
+
+/** Spinner */
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mejor espacio en los resultados */
+#output p {
+    margin-bottom: 5px;
+}
+
+.floating-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+}
+
+.animated-container {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body.light-mode textarea,
+body.light-mode #output {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    border-color: #ccc;
+}
+
+body.dark-mode textarea,
+body.dark-mode #output {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+    border-color: #444;
+}
+
+button {
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Estilos para los textos amarillos en modo oscuro */
+.text-yellow-400 {
+    color: #facc15;
+    /* Amarillo */
+    font-weight: bolder;
+}
+
+/* En el modo claro, cambia el amarillo a rojo */
+.light-mode .text-yellow-400 {
+    color: #dc2626;
+    /* Rojo */
+    font-weight: bolder;
+}
+
+
+
+/* Estilos del footer */
+footer {
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+footer a {
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #90caf9;
+}

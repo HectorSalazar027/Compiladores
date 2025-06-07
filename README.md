@@ -74,6 +74,13 @@ Abre `frontend/index.html` en tu navegador.
   - Reconocimiento de: `KEYWORD`, `LITERAL`, `CONSTANT`, `IDENTIFIER`, `OPERATOR`, `PUNCTUATION`
 - **Análisis Sintáctico**:
   - Construcción del AST con nodos: funciones, ciclos, condiciones, expresiones, llamadas de funciones, listas
+- **Soporte de estructuras de control extendidas:**
+  - Definiciones: import (con alias), def, class
+  - Sentencias de control: if/elif/else, while, for‑in, try/except, pass, return
+  - Estructuras de datos: lista, tupla, diccionario
+  - Operadores compuestos: +=, -=, *=, /=, etc.
+  - Programación orientada a objetos: instanciación y llamada a métodos simples
+  - Uso de in tanto en bucles como en expresiones condicionales
 - **Interfaz Web**:
   - Tema claro/oscuro
   - Soporte para carga de archivos `.py`, `.js`, `.cpp`, `.txt`

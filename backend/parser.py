@@ -1,295 +1,453 @@
-# Representa un token con tipo y valor, usado por el parser
+
+# ---------------------------------------------------------------------------
+#  TOKENS
+# ---------------------------------------------------------------------------
+
 class Token:
     def __init__(self, type_, value):
-        self.type = type_
+        self.type  = type_
         self.value = value
-
     def __repr__(self):
         return f"Token({self.type}, {self.value})"
 
-# Clase base para nodos del árbol de sintaxis abstracta (AST)
-class ASTNode:
-    pass
+# ---------------------------------------------------------------------------
+#  AST NODES
+# ---------------------------------------------------------------------------
 
-# Nodo para representar una función
+class ASTNode: ...
+
+class ProgramNode(ASTNode):
+    def __init__(self, body):  self.body = body
+
+
+# --- sentencias ------------------------------------------------------------
+
 class FunctionNode(ASTNode):
     def __init__(self, name, params, body):
-        self.name = name
-        self.params = params
-        self.body = body
+        self.name, self.params, self.body = name, params, body
 
-# Nodo para representar un ciclo while
-class WhileNode(ASTNode):
-    def __init__(self, condition, body):
-        self.condition = condition
-        self.body = body
-
-# Nodo para representar una instrucción return
-class ReturnNode(ASTNode):
-    def __init__(self, value):
-        self.value = value
-
-# Nodo de asignación: variable = valor
-class AssignmentNode(ASTNode):
-    def __init__(self, target, value):
-        self.target = target
-        self.value = value
-
-# Nodo para operaciones binarias: a + b, x * y, etc.
-class BinaryOpNode(ASTNode):
-    def __init__(self, left, op, right):
-        self.left = left
-        self.op = op
-        self.right = right
-
-# Nodo para representar un identificador (nombre de variable)
-class IdentifierNode(ASTNode):
-    def __init__(self, name):
-        self.name = name
-
-# Nodo para representar constantes numéricas
-class ConstantNode(ASTNode):
-    def __init__(self, value):
-        self.value = value
-
-# Nodo para llamada a función: f(x, y)
-class FunctionCallNode(ASTNode):
-    def __init__(self, name, args):
-        self.name = name
-        self.args = args
-
-# Nodo para condicional if (con else opcional)
-class IfNode(ASTNode):
-    def __init__(self, condition, body, else_body=None):
-        self.condition = condition
-        self.body = body
-        self.else_body = else_body
-
-# Nodo para representar cadenas de texto
-class StringNode(ASTNode):
-    def __init__(self, value):
-        self.value = value
-
-# Nodo para listas: [1, 2, 3]
-class ListNode(ASTNode):
-    def __init__(self, elements):
-        self.elements = elements
-
-# Nodo para declaraciones de import
-class ImportNode(ASTNode):
-    def __init__(self, module):
-        self.module = module
-
-# Nodo para representar una clase
 class ClassNode(ASTNode):
     def __init__(self, name, body):
-        self.name = name
-        self.body = body
+        self.name, self.body = name, body
 
-# Nodo para representar un método dentro de una clase
-class MethodNode(ASTNode):
-    def __init__(self, name, params, body):
-        self.name = name
-        self.params = params
-        self.body = body
+class ImportNode(ASTNode):
+    def __init__(self, names):  # [(módulo, alias)]
+        self.names = names
 
-# Nodo para representar la creación de un objeto
+class WhileNode(ASTNode):
+    def __init__(self, cond, body):
+        self.cond, self.body = cond, body
+
+class ForNode(ASTNode):
+    def __init__(self, target, iterable, body):
+        self.target, self.iterable, self.body = target, iterable, body
+
+class IfNode(ASTNode):
+    def __init__(self, cond, body, elif_blocks=None, else_body=None):
+        self.cond = cond
+        self.body = body
+        self.elif_blocks = elif_blocks or []   # [(cond, body)]
+        self.else_body   = else_body
+
+
+class TryNode(ASTNode):
+    def __init__(self, body, handlers, else_body=None, finally_body=None):
+        self.body = body
+        self.handlers = handlers
+        self.else_body = else_body
+        self.finally_body = finally_body
+
+
+class ExceptHandlerNode(ASTNode):
+    def __init__(self, exc, body):
+        self.exc, self.body = exc, body
+
+class PassNode(ASTNode): ...
+class BreakNode(ASTNode): ...
+
+class ReturnNode(ASTNode):
+    def __init__(self, value): self.value = value
+
+class AssignmentNode(ASTNode):
+    def __init__(self, target, value):
+        self.target, self.value = target, value
+
+
+class AugmentedAssignmentNode(ASTNode):
+    def __init__(self, target, op, value):
+        self.target, self.op, self.value = target, op, value
 class ObjectInstanceNode(ASTNode):
-    def __init__(self, name, class_name):
-        self.name = name
-        self.class_name = class_name
+    def __init__(self, name, klass): self.name, self.klass = name, klass
 
-# Nodo para representar una llamada a método de un objeto
+# --- expresiones -----------------------------------------------------------
+
+class IdentifierNode(ASTNode):
+    def __init__(self, name): self.name = name
+
+class ConstantNode(ASTNode):
+    def __init__(self, value): self.value = value
+
+class StringNode(ASTNode):
+    def __init__(self, value): self.value = value
+
+class ListNode(ASTNode):
+    def __init__(self, elements): self.elements = elements
+
+class DictNode(ASTNode):
+    def __init__(self, pairs): self.pairs = pairs  # list of (key,val)
+
+class TupleNode(ASTNode):
+    def __init__(self, elements): self.elements = elements
+
+class UnaryOpNode(ASTNode):
+    def __init__(self, op, operand):
+        self.op, self.operand = op, operand
+
+class BinaryOpNode(ASTNode):
+    def __init__(self, left, op, right):
+        self.left, self.op, self.right = left, op, right
+
+class FunctionCallNode(ASTNode):
+    def __init__(self, name, args): self.name, self.args = name, args
+
 class MethodCallNode(ASTNode):
-    def __init__(self, object_name, method_name, args):
-        self.object_name = object_name
-        self.method_name = method_name
-        self.args = args
+    def __init__(self, obj, method, args): self.obj, self.method, self.args = obj, method, args
 
-# Clase principal que convierte tokens en un AST
+# ---------------------------------------------------------------------------
+#  PARSER
+# ---------------------------------------------------------------------------
+
 class Parser:
+    AUG_ASSIGN_OPS = {'+=', '-=', '*=', '/=', '//=', '%=', '**=', '&=', '|=', '^=', '>>=', '<<='}
     def __init__(self, token_list):
-        self.tokens = [Token(tok["type"], tok["value"]) for tok in token_list]  # Lista de tokens
-        self.pos = 0  # Posición actual en la lista de tokens
+        self.tokens = [Token(t['type'], t['value']) for t in token_list]
+        self.pos = 0
 
-    # Devuelve el token actual
-    def current_token(self):
-        if self.pos < len(self.tokens):
-            return self.tokens[self.pos]
-        return Token("EOF", "")
+    # ---------- helpers ----------------------------------------------------
 
-    # Mira tokens siguientes sin consumirlos
-    def lookahead(self, n =1):
-        if self.pos + n < len(self.tokens):
-            return self.tokens[self.pos + n]
-        return Token("EOF", "")
+    def cur(self):
+        return self.tokens[self.pos] if self.pos < len(self.tokens) else Token('EOF','')
+    def look(self, n=1):
+        idx = self.pos + n
+        return self.tokens[idx] if idx < len(self.tokens) else Token('EOF','')
 
-    # Consume un token si es del tipo esperado
-    def consume(self, expected_type=None):
-        token = self.current_token()
-        if expected_type and token.type != expected_type:
-            raise SyntaxError(f"Expected {expected_type} but got {token.type}")
+    def consume(self, ttype=None, value=None):
+        tok = self.cur()
+        if ttype and tok.type != ttype:
+            raise SyntaxError(f"Esperaba {ttype}, obtuve {tok.type}:{tok.value}")
+        if value and tok.value != value:
+            raise SyntaxError(f"Esperaba '{value}', obtuve '{tok.value}'")
         self.pos += 1
-        return token
+        return tok
 
-    # Punto de entrada: analiza todos los tokens y devuelve el AST
+    # ---------- entry ------------------------------------------------------
+
     def parse(self):
-        ast = []
-        while self.current_token().type != "EOF":
-            if self.current_token().value == "def":
-                ast.append(self.parse_function())
-            elif self.current_token().value == "class":
-                ast.append(self.parse_class())
-            elif self.current_token().value == "while":
-                ast.append(self.parse_while())
-            elif self.current_token().value == "if":
-                ast.append(self.parse_if())
-            elif self.current_token().value == "import":
-                ast.append(self.parse_import())
-            else:
-                ast.append(self.parse_statement())
-        return ast
+        body=[]
+        while self.cur().type != 'EOF':
+            body.append(self.parse_stmt())
+        return ProgramNode(body)
 
-    # Parseo de función: def nombre(parametros):
-    def parse_function(self):
-        self.consume("KEYWORD")  # def
-        name = self.consume("IDENTIFIER").value
-        self.consume("PUNCTUATION")  # (
-        params = []
-        while self.current_token().value != ")":
-            params.append(self.consume("IDENTIFIER").value)
-            if self.current_token().value == ",":
-                self.consume("PUNCTUATION")
-        self.consume("PUNCTUATION")  # )
-        self.consume("PUNCTUATION")  # :
-        body = self.parse_block()
-        return FunctionNode(name, params, body)
+    # ---------- statements -------------------------------------------------
 
-    # Parseo de clase: class Nombre:
-    def parse_class(self):
-        self.consume("KEYWORD")
-        name = self.consume("IDENTIFIER").value
-        self.consume("PUNCTUATION")  # :
-        body = self.parse_block()
-        return ClassNode(name, body)
+    def parse_stmt(self):
+        tok=self.cur()
 
-    # Parseo de bucle while
-    def parse_while(self):
-        self.consume("KEYWORD")  # while
-        condition = self.parse_expression()
-        self.consume("PUNCTUATION")  # :
-        body = self.parse_block()
-        return WhileNode(condition, body)
+        if tok.type=='KEYWORD':
+            kw=tok.value
+            if kw=='def':   return self.parse_function()
+            if kw=='class': return self.parse_class()
+            if kw=='import':return self.parse_import()
+            if kw=='if':    return self.parse_if()
+            if kw=='while': return self.parse_while()
+            if kw=='for':   return self.parse_for()
+            if kw=='try':   return self.parse_try()
+            if kw=='pass':
+                self.consume('KEYWORD','pass'); return PassNode()
+            if kw=='break':   return self.consume('KEYWORD','break') or BreakNode()
+            if kw=='return':
+                self.consume('KEYWORD','return')
+                val = self.parse_expr()
+                return ReturnNode(val)
 
-    # Parseo de if (con else opcional)
-    def parse_if(self):
-        self.consume("KEYWORD")  # if
-        condition = self.parse_expression()
-        self.consume("PUNCTUATION")  # :
-        body = self.parse_block()
-        else_body = None
-        if self.current_token().value == "else":
-            self.consume("KEYWORD")
-            self.consume("PUNCTUATION")  # :
-            else_body = self.parse_block()
-        return IfNode(condition, body, else_body)
+        if tok.type=='IDENTIFIER':
+            # obj.meth(...)
+            if self.look().value=='.':
+                obj=self.consume('IDENTIFIER').value
+                self.consume('PUNCTUATION','.')
+                meth=self.consume('IDENTIFIER').value
+                args=self.parse_call_args()
+                return MethodCallNode(obj,meth,args)
+            # assign or instantiation
+            
 
-    # Parseo de import
+            # assignment simple o compuesto
+            next_tok = self.look()
+            if next_tok.value == '=' or (
+                next_tok.type == 'OPERATOR' and next_tok.value in self.AUG_ASSIGN_OPS
+            ):
+                target = self.consume('IDENTIFIER').value
+                # '=' o combinados como '+=', '-=', etc.
+                op_token = self.consume('OPERATOR').value
+                if op_token == '=':
+                    value = self.parse_expr()
+                    return AssignmentNode(target, value)
+                else:
+                    op = op_token[:-1]  # '+=' -> '+'
+                    value = self.parse_expr()
+                    return AugmentedAssignmentNode(target, op, value)
+            if self.look().value=='(':
+                name=self.consume('IDENTIFIER').value
+                args=self.parse_call_args()
+                return FunctionCallNode(name,args)
+
+        raise SyntaxError(f"Sentencia no reconocida a partir de {tok.type}:{tok.value}")
+
+    # ---------- skip util --------------------------------------------------
+
+    def skip_parens(self):
+        depth=1
+        while depth and self.cur().type!='EOF':
+            if self.cur().value=='(': depth+=1
+            elif self.cur().value==')': depth-=1
+            self.consume()
+
+    # ---------- import -----------------------------------------------------
+
     def parse_import(self):
-        self.consume("KEYWORD")  # import
-        module = self.consume("IDENTIFIER").value
-        return ImportNode(module)
-
-    # Parseo de un bloque (conjunto de sentencias)
-    def parse_block(self):
-        statements = []
-        while self.pos < len(self.tokens):
-            token = self.current_token()
-            if token.value in ("def", "class", "while", "if", "import", "else"):
+        self.consume('KEYWORD','import')
+        names=[]
+        while True:
+            parts=[self.consume('IDENTIFIER').value]
+            while self.cur().value=='.':
+                self.consume('PUNCTUATION','.')
+                parts.append(self.consume('IDENTIFIER').value)
+            module='.'.join(parts)
+            alias=None
+            if self.cur().type=='KEYWORD' and self.cur().value=='as':
+                self.consume('KEYWORD','as')
+                alias=self.consume('IDENTIFIER').value
+            names.append((module,alias))
+            if self.cur().value==',':
+                self.consume('PUNCTUATION',',')
+            else:
                 break
-            try:
-                statements.append(self.parse_statement())
-            except SyntaxError:
+        return ImportNode(names)
+
+    # ---------- try / except ----------------------------------------------
+
+
+    def parse_try(self):
+        self.consume('KEYWORD','try')
+        self.consume('PUNCTUATION',':')
+        body = self.parse_block(stop={'except','else','finally'})
+        handlers = []
+        while self.cur().type == 'KEYWORD' and self.cur().value == 'except':
+            self.consume('KEYWORD','except')
+            exc = None
+            if self.cur().type == 'IDENTIFIER':
+                exc = self.consume('IDENTIFIER').value
+                if self.cur().type == 'KEYWORD' and self.cur().value == 'as':
+                    self.consume('KEYWORD','as')
+                    alias = self.consume('IDENTIFIER').value
+                    exc += f' as {alias}'
+            self.consume('PUNCTUATION',':')
+            hbody = self.parse_block(stop={'except','else','finally'})
+            handlers.append(ExceptHandlerNode(exc, hbody))
+    
+        else_body = None
+        if self.cur().type == 'KEYWORD' and self.cur().value == 'else':
+            self.consume('KEYWORD','else')
+            self.consume('PUNCTUATION',':')
+            else_body = self.parse_block(stop={'finally'})
+    
+        finally_body = None
+        if self.cur().type == 'KEYWORD' and self.cur().value == 'finally':
+            self.consume('KEYWORD','finally')
+            self.consume('PUNCTUATION',':')
+            finally_body = self.parse_block()
+    
+        return TryNode(body, handlers, else_body, finally_body)
+    
+    # ---------- defs -------------------------------------------------------
+
+    def parse_function(self):
+        self.consume('KEYWORD','def')
+        name=self.consume('IDENTIFIER').value
+        self.consume('PUNCTUATION','(')
+        params=[]
+        while self.cur().value!=')':
+            params.append(self.consume('IDENTIFIER').value)
+            if self.cur().value==',':
+                self.consume('PUNCTUATION',',')
+        self.consume('PUNCTUATION',')')
+        self.consume('PUNCTUATION',':')
+        body=self.parse_block()
+        return FunctionNode(name,params,body)
+
+    def parse_class(self):
+        self.consume('KEYWORD','class')
+        name=self.consume('IDENTIFIER').value
+        if self.cur().value=='(':
+            self.skip_parens()
+        self.consume('PUNCTUATION',':')
+        body=self.parse_block()
+        return ClassNode(name,body)
+
+    # ---------- control flow ----------------------------------------------
+
+    def parse_if(self):
+        self.consume('KEYWORD','if')
+        cond=self.parse_expr()
+        self.consume('PUNCTUATION',':')
+        body=self.parse_block(stop={'elif','else'})
+        elif_blocks=[]
+        while self.cur().type=='KEYWORD' and self.cur().value=='elif':
+            self.consume('KEYWORD','elif')
+            econd=self.parse_expr()
+            self.consume('PUNCTUATION',':')
+            ebody=self.parse_block(stop={'elif','else'})
+            elif_blocks.append((econd,ebody))
+        else_body=None
+        if self.cur().type=='KEYWORD' and self.cur().value=='else':
+            self.consume('KEYWORD','else')
+            self.consume('PUNCTUATION',':')
+            else_body=self.parse_block()
+        return IfNode(cond,body,elif_blocks,else_body)
+
+    def parse_while(self):
+        self.consume('KEYWORD','while')
+        cond=self.parse_expr()
+        self.consume('PUNCTUATION',':')
+        body=self.parse_block()
+        return WhileNode(cond,body)
+
+    def parse_for(self):
+        self.consume('KEYWORD','for')
+        target=self.consume('IDENTIFIER').value
+        self.consume('KEYWORD','in')
+        iterable=self.parse_expr()
+        self.consume('PUNCTUATION',':')
+        body=self.parse_block()
+        return ForNode(target,iterable,body)
+
+    # ---------- générico de bloque ----------------------------------------
+
+    def parse_block(self, stop=None):
+        stop=stop or set()
+        stmts=[]
+        while self.cur().type!='EOF':
+            if self.cur().type=='KEYWORD' and self.cur().value in stop:
                 break
-        return statements
+            # heurística de dedent
+            if self.cur().type=='KEYWORD' and self.cur().value in {'def','class','if','for','while','try','import'} and stmts:
+                break
+            stmts.append(self.parse_stmt())
+        return stmts
 
-    # Parseo de una sola sentencia
-    def parse_statement(self):
-        token = self.current_token()
-        if token.type == "IDENTIFIER":
-            if self.lookahead().value == "(":  # Llamada a función
-                return self.parse_expression()
-            elif self.lookahead().value == "=" and self.lookahead(2).type == "IDENTIFIER":  # Instancia de clase
-                target = self.consume("IDENTIFIER").value
-                self.consume("OPERATOR")
-                class_name = self.consume("IDENTIFIER").value
-                self.consume("PUNCTUATION")
-                return ObjectInstanceNode(target, class_name)
-            elif self.lookahead().value == ".":  # Llamada a método
-                obj = self.consume("IDENTIFIER").value
-                self.consume("PUNCTUATION")
-                method = self.consume("IDENTIFIER").value
-                self.consume("PUNCTUATION")  # (
-                args = []
-                while self.current_token().value != ")":
-                    args.append(self.parse_expression())
-                    if self.current_token().value == ",":
-                        self.consume("PUNCTUATION")
-                self.consume("PUNCTUATION")  # )
-                return MethodCallNode(obj, method, args)
-            else:  # Asignación simple
-                target = self.consume("IDENTIFIER").value
-                self.consume("OPERATOR")
-                value = self.parse_expression()
-                return AssignmentNode(target, value)
-        elif token.value == "return":
-            self.consume("KEYWORD")
-            value = self.parse_expression()
-            return ReturnNode(value)
-        else:
-            raise SyntaxError(f"Unknown statement starting with {token}")
+    # ---------- call args --------------------------------------------------
 
-    # Parseo de una expresión (operadores binarios)
-    def parse_expression(self):
+    def parse_call_args(self):
+        self.consume('PUNCTUATION','(')
+        args=[]
+        while self.cur().value!=')':
+            args.append(self.parse_expr())
+            if self.cur().value==',':
+                self.consume('PUNCTUATION',',')
+        self.consume('PUNCTUATION',')')
+        return args
+
+    # ---------- expresiones ------------------------------------------------
+
+    BIN_OPS = {'+','-','*','/','//','%','==','!=','<','>','<=','>=','%'}
+    def parse_expr(self):
+        """Parse binary expressions with left-associativity.
+        Soporta operadores binarios en BIN_OPS, lógicos 'and'/'or', y el operador de pertenencia 'in'.
+        """
         left = self.parse_term()
-        while self.current_token().type == "OPERATOR" and self.current_token().value in ("+", "-", "<", ">", "==", "*"):
-            op = self.consume("OPERATOR").value
+        while True:
+            tok = self.cur()
+            if tok.type == 'OPERATOR' and tok.value in self.BIN_OPS:
+                op = tok.value
+                self.consume('OPERATOR')
+            elif tok.type == 'KEYWORD' and tok.value in {'and', 'or', 'in'}:
+                op = tok.value
+                self.consume('KEYWORD')
+            else:
+                break
             right = self.parse_term()
             left = BinaryOpNode(left, op, right)
         return left
-
-    # Parseo de términos simples: constantes, variables, cadenas, listas, llamadas
     def parse_term(self):
-        token = self.current_token()
-        if token.type == "CONSTANT":
-            return ConstantNode(self.consume("CONSTANT").value)
-        elif token.type == "LITERAL":
-            return StringNode(self.consume("LITERAL").value)
-        elif token.type == "IDENTIFIER":
-            name = self.consume("IDENTIFIER").value
-            if self.current_token().value == "(":  # llamada a función
-                self.consume("PUNCTUATION")  # (
-                args = []
-                while self.current_token().value != ")":
-                    args.append(self.parse_expression())
-                    if self.current_token().value == ",":
-                        self.consume("PUNCTUATION")
-                self.consume("PUNCTUATION")  # )
-                return FunctionCallNode(name, args)
+        tok=self.cur()
+
+        # ---------------- unario -----------------
+        # literales True / False / None
+        if tok.type=='KEYWORD' and tok.value in {'True','False','None'}:
+            lit = {'True': True, 'False': False, 'None': None}[tok.value]
+            self.consume('KEYWORD')
+            return ConstantNode(lit)
+        if tok.type=='KEYWORD' and tok.value=='not':
+            self.consume('KEYWORD','not')
+            operand = self.parse_term()
+            return UnaryOpNode('not', operand)
+
+        if tok.type=='OPERATOR' and tok.value in {'+','-'}:
+            op=self.consume('OPERATOR').value
+            operand=self.parse_term()
+            return UnaryOpNode(op,operand)
+
+        # ---------------- literales/ident -----------------
+        if tok.type=='CONSTANT':
+            return ConstantNode(self.consume('CONSTANT').value)
+        if tok.type=='LITERAL':
+            return StringNode(self.consume('LITERAL').value)
+        if tok.type=='IDENTIFIER':
+            name=self.consume('IDENTIFIER').value
+            if self.cur().value=='(':
+                args=self.parse_call_args()
+                return FunctionCallNode(name,args)
             return IdentifierNode(name)
-        elif token.value == "[":  # lista
-            self.consume("PUNCTUATION")
-            elements = []
-            while self.current_token().value != "]":
-                elements.append(self.parse_expression())
-                if self.current_token().value == ",":
-                    self.consume("PUNCTUATION")
-            self.consume("PUNCTUATION")  # ]
-            return ListNode(elements)
-        elif token.value == "(":  # expresión entre paréntesis
-            self.consume("PUNCTUATION")
-            expr = self.parse_expression()
-            self.consume("PUNCTUATION")
-            return expr
-        else:
-            raise SyntaxError(f"Unexpected token {token}")
+
+        # ---------------- estructuras -----------------
+        if tok.value=='[':
+            self.consume('PUNCTUATION','[')
+            elems=[]
+            while self.cur().value!=']':
+                elems.append(self.parse_expr())
+                if self.cur().value==',':
+                    self.consume('PUNCTUATION',',')
+            self.consume('PUNCTUATION',']')
+            return ListNode(elems)
+
+        if tok.value=='{':
+            self.consume('PUNCTUATION','{')
+            pairs=[]
+            if self.cur().value!='}':
+                while True:
+                    key=self.parse_expr()
+                    self.consume('PUNCTUATION',':')
+                    val=self.parse_expr()
+                    pairs.append((key,val))
+                    if self.cur().value==',':
+                        self.consume('PUNCTUATION',',')
+                    else:
+                        break
+            self.consume('PUNCTUATION','}')
+            return DictNode(pairs)
+
+        if tok.value=='(':
+            self.consume('PUNCTUATION','(')
+            elem=self.parse_expr()
+            if self.cur().value==',':
+                elems=[elem]
+                while self.cur().value==',':
+                    self.consume('PUNCTUATION',',')
+                    if self.cur().value==')': break
+                    elems.append(self.parse_expr())
+                self.consume('PUNCTUATION',')')
+                return TupleNode(elems)
+            self.consume('PUNCTUATION',')')
+            return elem
+
+        raise SyntaxError(f"Expresión inesperada en {tok.type}:{tok.value}")

@@ -59,16 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("output").innerHTML = "";
     });
 
-    document.getElementById("copyCodeBtn").addEventListener("click", () => {
-        const text = document.getElementById("codeInput").value;
-        navigator.clipboard.writeText(text);
-    });
-
-    document.getElementById("copyOutBtn").addEventListener("click", () => {
-        const text = document.getElementById("output").innerText;
-        navigator.clipboard.writeText(text);
-    });
-
     document.getElementById("downloadBtn").addEventListener("click", () => {
         const blob = new Blob([document.getElementById("output").innerText], { type: "text/plain" });
         const url = URL.createObjectURL(blob);

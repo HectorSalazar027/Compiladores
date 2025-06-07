@@ -227,4 +227,8 @@ particlesJS("particles-js", {
     },
     "retina_detect": true
 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8cb357c29b6e35da6380808f636ab612419bfbe9
 */

@@ -16,8 +16,8 @@ def to_dict(node):
     return node
 
 TOKEN_SPECIFICATION = [
-    ('KEYWORD',     r'\b(def|in|import|if|else|while|return)\b'),
-    ('LITERAL',     r'f?"[^"]*"'),
+    ('KEYWORD', r'\b(class|def|return|if|else|while|True|False|import|for|in|range|print|input)\b'),
+    ('LITERAL', r'f?"[^"\n]*"'),  
     ('CONSTANT',    r'\b\d+\.\d+|\b\d+\b'),
     ('IDENTIFIER',  r'\b[a-zA-Z_][a-zA-Z_0-9]*\b'),
     ('OPERATOR',    r'==|!=|<=|>=|<|>|=|\+|\-|\*|/'),
@@ -49,7 +49,6 @@ def lexer(code: str):
         "counts": counts,
         "total_tokens": total_tokens,
     }
-
 @app.route("/analyze", methods=["POST"])
 def analyze():
     req = request.get_json()
@@ -57,49 +56,44 @@ def analyze():
     mode = req.get("mode", "lex")
 
     lex = lexer(code)
-    
+
+    # Si es sólo análisis léxico, devolver directamente
+    if mode == "lex":
+        return jsonify({
+            "tokens": lex["tokens"],
+            "counts": lex["counts"],
+            "total_tokens": lex["total_tokens"]
+        })
+
+    # Si requiere análisis sintáctico o semántico
     try:
         parser = Parser(lex["tokens_list"])
         ast = parser.parse()
-
-        if mode == "lex":
-            return jsonify({
-                "tokens": lex["tokens"],
-                "counts": lex["counts"],
-                "total_tokens": lex["total_tokens"]
-            })
-            
-        elif mode == "sem":
-            parser = Parser(lex["tokens_list"])
-            ast = parser.parse()
-
-            # Aquí agregas tu chequeo semántico (puede ser una función externa)
-            analyzer = SemanticAnalyzer()
-            errors = analyzer.analyze(ast)
-
-
-            return jsonify({
-                "tokens": lex["tokens"],
-                "counts": lex["counts"],
-                "total_tokens": lex["total_tokens"],
-                "ast": to_dict(ast),
-                "semantics": errors  # lista de advertencias o errores semánticos
-            })
-            
-        elif mode == "full":
-                return jsonify({
-                    "tokens": lex["tokens"],
-                    "counts": lex["counts"],
-                    "total_tokens": lex["total_tokens"],
-                    "ast": to_dict(ast)
-                })
-            
-        else:
-            return jsonify({"error": f"Modo de análisis no reconocido: {mode}"}), 400
-
     except Exception as e:
         print("ERROR EN PARSER:", e)
         return jsonify({"error": str(e)}), 400
+
+    if mode == "sem":
+        analyzer = SemanticAnalyzer()
+        errors = analyzer.analyze(ast)
+
+        return jsonify({
+            "tokens": lex["tokens"],
+            "counts": lex["counts"],
+            "total_tokens": lex["total_tokens"],
+            "ast": to_dict(ast),
+            "semantics": errors
+        })
+
+    elif mode == "full":
+        return jsonify({
+            "tokens": lex["tokens"],
+            "counts": lex["counts"],
+            "total_tokens": lex["total_tokens"],
+            "ast": to_dict(ast)
+        })
+
+    return jsonify({"error": f"Modo de análisis no reconocido: {mode}"}), 400
 
 
 if __name__ == "__main__":

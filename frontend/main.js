@@ -1,6 +1,5 @@
 let analysisMode = "lex";  // default: sólo léxico
 
-
 /* ---------- gestor de tema ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('themeBtn');
@@ -18,19 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.querySelectorAll(".mode-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", () => {
             analysisMode = btn.dataset.mode;
 
-            // Aplica estilos visuales
-            document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("ring-2", "text-blue-500", "dark:text-blue-400", "bg-white"));
+            // Resetear estilos de todos los botones
+            document.querySelectorAll(".mode-btn").forEach(b => {
+                b.classList.remove("ring-2", "text-blue-500", "dark:text-blue-400", "bg-white");
+            });
+
+            // Estilo activo al botón seleccionado
             btn.classList.add("ring-2", "text-blue-500", "dark:text-blue-400", "bg-white");
 
-            // Opcional: limpiar resultados al cambiar de modo
+            // Limpia resultados anteriores
             document.getElementById("output").innerHTML = "";
         });
     });
-
-
 
     applyTheme(localStorage.getItem('theme') || 'dark');
 
@@ -79,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
 function traducirError(msg) {
     const catalogo = [
         {
@@ -119,7 +119,7 @@ async function analyzeCode(code = null) {
         const resp = await fetch("http://localhost:5000/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ code, mode: analysisMode }) // ← aquí
+            body: JSON.stringify({ code, mode: analysisMode })
         });
         const data = await resp.json();
         loadingDiv.classList.add("hidden");
@@ -135,13 +135,22 @@ async function analyzeCode(code = null) {
 
             outputDiv.innerHTML += `<p class="mt-2"><strong>Total de tokens:</strong> ${data.total_tokens}</p>`;
 
-            if (analysisMode === "full") {
+            if (analysisMode === "full" || analysisMode === "sem") {
                 outputDiv.innerHTML +=
                     `<h2 class='text-lg font-bold mt-4'>Árbol de Sintaxis (AST):</h2>
 <pre class="whitespace-pre text-green-300 bg-gray-900 p-2 rounded">
 ${JSON.stringify(data.ast, null, 2)}
 </pre>`;
             }
+
+            if (analysisMode === "sem" && data.semantics) {
+                outputDiv.innerHTML +=
+                    `<h2 class='text-lg font-bold mt-4 text-red-400'>Errores Semánticos:</h2>
+<ul class="list-disc pl-5 text-red-400">` +
+                    data.semantics.map(msg => `<li>${msg}</li>`).join("") +
+                    `</ul>`;
+            }
+
         } else {
             outputDiv.innerHTML =
                 `<div class='text-red-500'>
@@ -178,13 +187,14 @@ function loadExample() {
 print(suma(5, 10))`;
 }
 
-
 //Descomentar el de abajo si quieres ver la cara de Solano
 
+/*
 particlesJS("particles-js", 
     {"particles":{"number":{"value":80,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"shape":{"type":"circle","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":0.5,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":3,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":6,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"repulse"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":400,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true});var count_particles, stats, update; stats = new Stats; stats.setMode(0); stats.domElement.style.position = 'absolute'; stats.domElement.style.left = '0px'; stats.domElement.style.top = '0px'; document.body.appendChild(stats.domElement); count_particles = document.querySelector('.js-count-particles'); update = function() { stats.begin(); stats.end(); if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) { count_particles.innerText = window.pJSDom[0].pJS.particles.array.length; } requestAnimationFrame(update); }; requestAnimationFrame(update);;
 
-/*
+    */
+
 particlesJS("particles-js", {
     "particles": {
         "number": { "value": 30, "density": { "enable": true, "value_area": 800 } },
@@ -217,4 +227,3 @@ particlesJS("particles-js", {
     },
     "retina_detect": true
 });
-*/

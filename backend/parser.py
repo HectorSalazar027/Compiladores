@@ -1,4 +1,3 @@
-
 class Token:
     def __init__(self, type_, value):
         self.type = type_
@@ -68,6 +67,28 @@ class ImportNode(ASTNode):
     def __init__(self, module):
         self.module = module
 
+class ClassNode(ASTNode):
+    def __init__(self, name, body):
+        self.name = name
+        self.body = body
+        
+class MethodNode(ASTNode):
+    def __init__(self, name, params, body):
+        self.name = name
+        self.params = params
+        self.body = body
+
+class ObjectInstanceNode(ASTNode):
+    def __init__(self, name, class_name):
+        self.name = name
+        self.class_name = class_name
+
+class MethodCallNode(ASTNode):
+    def __init__(self, object_name, method_name, args):
+        self.object_name = object_name
+        self.method_name = method_name
+        self.args = args
+
 
 class Parser:
     def __init__(self, token_list):
@@ -79,9 +100,9 @@ class Parser:
             return self.tokens[self.pos]
         return Token("EOF", "")
 
-    def lookahead(self):
-        if self.pos + 1 < len(self.tokens):
-            return self.tokens[self.pos + 1]
+    def lookahead(self, n =1):
+        if self.pos + n < len(self.tokens):
+            return self.tokens[self.pos + n]
         return Token("EOF", "")
 
     def consume(self, expected_type=None):
@@ -96,6 +117,8 @@ class Parser:
         while self.current_token().type != "EOF":
             if self.current_token().value == "def":
                 ast.append(self.parse_function())
+            elif self.current_token().value == "class":
+                ast.append(self.parse_class())
             elif self.current_token().value == "while":
                 ast.append(self.parse_while())
             elif self.current_token().value == "if":
@@ -111,23 +134,21 @@ class Parser:
         name = self.consume("IDENTIFIER").value
         self.consume("PUNCTUATION")  # (
         params = []
-        while True:
-            if self.current_token().type == "PUNCTUATION" and self.current_token().value == ")":
-                break
-            if self.current_token().type != "IDENTIFIER":
-                raise SyntaxError(f"Expected IDENTIFIER in parameter list but got {self.current_token().type}")
-            param = self.consume("IDENTIFIER").value
-            params.append(param)
+        while self.current_token().value != ")":
+            params.append(self.consume("IDENTIFIER").value)
             if self.current_token().value == ",":
                 self.consume("PUNCTUATION")
-            elif self.current_token().value == ")":
-                break
-            else:
-                raise SyntaxError(f"Unexpected token in parameter list: {self.current_token()}")
-        self.consume("PUNCTUATION")  # )
-        self.consume("PUNCTUATION")  # :
+        self.consume("PUNCTUATION")
+        self.consume("PUNCTUATION")
         body = self.parse_block()
         return FunctionNode(name, params, body)
+    
+    def parse_class(self):
+        self.consume("KEYWORD")
+        name = self.consume("IDENTIFIER").value
+        self.consume("PUNCTUATION")
+        body = self.parse_block()
+        return ClassNode(name, body)
 
     def parse_while(self):
         self.consume("KEYWORD")  # while
@@ -157,7 +178,7 @@ class Parser:
         statements = []
         while self.pos < len(self.tokens):
             token = self.current_token()
-            if token.value in ("def", "while", "if", "import", "else"):
+            if token.value in ("def", "class", "while", "if", "import", "else"):
                 break
             try:
                 statements.append(self.parse_statement())
@@ -170,10 +191,29 @@ class Parser:
         if token.type == "IDENTIFIER":
             if self.lookahead().value == "(":
                 return self.parse_expression()
-            target = self.consume("IDENTIFIER").value
-            self.consume("OPERATOR")  # =
-            value = self.parse_expression()
-            return AssignmentNode(target, value)
+            elif self.lookahead().value == "=" and self.lookahead(2).type == "IDENTIFIER":
+                target = self.consume("IDENTIFIER").value
+                self.consume("OPERATOR")
+                class_name = self.consume("IDENTIFIER").value
+                self.consume("PUNCTUATION")
+                return ObjectInstanceNode(target, class_name)
+            elif self.lookahead().value == ".":
+                obj = self.consume("IDENTIFIER").value
+                self.consume("PUNCTUATION")
+                method = self.consume("IDENTIFIER").value
+                self.consume("PUNCTUATION")
+                args = []
+                while self.current_token().value != ")":
+                    args.append(self.parse_expression())
+                    if self.current_token().value == ",":
+                        self.consume("PUNCTUATION")
+                self.consume("PUNCTUATION")
+                return MethodCallNode(obj, method, args)
+            else:
+                target = self.consume("IDENTIFIER").value
+                self.consume("OPERATOR")
+                value = self.parse_expression()
+                return AssignmentNode(target, value)
         elif token.value == "return":
             self.consume("KEYWORD")
             value = self.parse_expression()

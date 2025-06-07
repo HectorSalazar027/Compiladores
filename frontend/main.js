@@ -115,7 +115,22 @@ async function analyzeCode(code = null) {
         loadingDiv.classList.add("hidden");
 
         if (resp.ok) {
-            outputDiv.innerHTML = `<h2 class='text-lg font-bold mb-2'>Tokens reconocidos:</h2>`;
+            if (analysisMode === "asm") {
+                outputDiv.innerHTML = `<h2 class='text-lg font-bold mb-2'>Resultado del Ensamblador:</h2>`;
+
+                outputDiv.innerHTML +=
+                    `<p class="mt-2"><strong>Registros:</strong></p>
+        <pre class="bg-gray-900 text-green-300 p-2 rounded">
+        ${JSON.stringify(data.registers, null, 2)}
+        </pre>`;
+
+                outputDiv.innerHTML +=
+                    `<p class="mt-2"><strong>Salida:</strong></p>
+        <pre class="bg-gray-900 text-yellow-300 p-2 rounded">
+        ${data.output.join('\n')}
+        </pre>`;
+                return;
+            }
 
             Object.entries(data.counts).forEach(([cat, qty]) => {
                 const vals = data.tokens[cat].join(", ");
@@ -170,12 +185,30 @@ document.getElementById("fileInput")
     });
 
 function loadExample() {
-    document.getElementById("codeInput").value =
-        `def suma(a, b):
+    if (analysisMode === "asm") {
+        document.getElementById("codeInput").value =
+`; Programa ejemplo ensamblador
+MOV R1, 5
+MOV R2, 10
+CMP R1, R2
+JNE DIFERENTE
+PRINT R1
+JMP FIN
+
+DIFERENTE:
+PRINT R2
+
+FIN:
+PRINT 999`;
+    } else {
+        document.getElementById("codeInput").value =
+`def suma(a, b):
     return a + b
 
 print(suma(5, 10))`;
+    }
 }
+
 
 //Descomentar el de abajo si quieres ver la cara de Solano
 

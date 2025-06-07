@@ -7,9 +7,14 @@ from io import BytesIO
 
 from parser import Parser
 from semantic import SemanticAnalyzer
+from assembler import SimpleAssembler
 
 app = Flask(__name__)
 CORS(app)
+
+def simulate_assembler(code):
+    asm = SimpleAssembler()
+    return asm.run(code)
 
 def to_dict(node):
     """Convierte cualquier objeto del AST en estructuras JSON-serializables."""
@@ -109,6 +114,15 @@ def analyze():
     req = request.get_json(force=True)
     code = req.get('code', '')
     mode = req.get('mode', 'lex')  # lex | full | sem
+    
+    # Ensamblador directo sin lexer/parser
+    if mode == 'asm':
+        try:
+            asm = SimpleAssembler()
+            result = asm.run(code)
+            return jsonify(result)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 400
 
     lex = lexer(code)
 
@@ -149,6 +163,14 @@ def analyze():
             'ast'         : to_dict(ast)
         })
 
+    if mode == 'asm':
+        try:
+            asm = SimpleAssembler()
+            result = asm.run(code)
+            return jsonify(result)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 400
+        
     return jsonify({'error': f'Modo de análisis no reconocido: {mode}'}), 400
 
 # Entrypoint para uso local

@@ -27,21 +27,76 @@ class SimpleAssembler:
             if instr == "MOV":
                 reg, val = args[0].rstrip(","), args[1]
                 self.registers[reg] = self._get_value(val)
+
             elif instr == "CMP":
                 reg, val = args[0].rstrip(","), args[1]
                 self.last_cmp = self.registers.get(reg, 0) - self._get_value(val)
+
             elif instr == "JNE":
                 label = args[0]
                 if self.last_cmp != 0:
                     pc = self.labels[label]
                     continue
+
             elif instr == "JMP":
                 label = args[0]
                 pc = self.labels[label]
                 continue
+            
             elif instr == "PRINT":
                 val = args[0]
                 self.output.append(str(self._get_value(val)))
+
+            elif instr == "ADD":
+                reg1 = args[0].rstrip(",")
+                reg2 = args[1]
+                val1 = self.registers.get(reg1, 0)
+                val2 = self._get_value(reg2)
+                self.registers[reg1] = val1 + val2
+
+            elif instr == "SUB":
+                reg1 = args[0].rstrip(",")
+                reg2 = args[1]
+                val1 = self.registers.get(reg1, 0)
+                val2 = self._get_value(reg2)
+                self.registers[reg1] = val1 - val2
+
+            elif instr == "MUL":
+                reg1 = args[0].rstrip(",")
+                reg2 = args[1]
+                val1 = self.registers.get(reg1, 0)
+                val2 = self._get_value(reg2)
+                self.registers[reg1] = val1 * val2
+
+            elif instr == "DIV":
+                reg1 = args[0].rstrip(",")
+                reg2 = args[1]
+                val1 = self.registers.get(reg1, 0)
+                val2 = self._get_value(reg2)
+                if val2 == 0:
+                    raise ValueError(f"DIVisión por cero en línea {pc + 1}")
+                self.registers[reg1] = val1 // val2
+
+            elif instr == "AND":
+                reg1 = args[0].rstrip(",")
+                reg2 = args[1]
+                val1 = self.registers.get(reg1, 0)
+                val2 = self._get_value(reg2)
+                self.registers[reg1] = val1 & val2
+
+            elif instr == "OR":
+                reg1 = args[0].rstrip(",")
+                reg2 = args[1]
+                val1 = self.registers.get(reg1, 0)
+                val2 = self._get_value(reg2)
+                self.registers[reg1] = val1 | val2
+
+            elif instr == "NOT":
+                reg = args[0]
+                val = self.registers.get(reg, 0)
+                self.registers[reg] = ~val
+
+
             pc += 1
 
     def _get_value(self, v):

@@ -206,6 +206,11 @@ class SemanticAnalyzer(NodeVisitor):
             self.errors.append(f"Objeto no declarado: '{node.obj}'.")
         for arg in node.args:
             self.visit(arg)
+            
+    def visit_IndexNode(self, node):
+        self.visit(node.obj)
+        self.visit(node.index)
+
 
 # ---------------------------------------------------------------------
 # 2) Intérprete / Linker
@@ -407,6 +412,15 @@ class Interpreter(NodeVisitor):
             raise RuntimeError(f"Objeto no tiene método '{node.method}'.")
         args = [self.visit(a) for a in node.args]
         return method(*args)
+    
+    def visit_IndexNode(self, node):
+        obj = self.visit(node.obj)
+        idx = self.visit(node.index)
+        try:
+            return obj[idx]
+        except Exception as e:
+            raise RuntimeError(f"Error al indexar: {e}")
+
 
 # Alias Linker
 Linker = Interpreter

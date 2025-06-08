@@ -52,7 +52,6 @@ TOKEN_MAP = {
     'ENDMARKER' : None,
     # El token "OP" se especializa más abajo a OPERATOR o PUNCTUATION
     'OP'        : 'OPERATOR',
-    
 }
 
 # Conjunto de caracteres que tratamos como puntuación (no operadores aritméticos)
@@ -97,7 +96,6 @@ def lexer(code: str):
             total_tokens += 1
     except tokenize.TokenError as err:
         # Caso típico: EOF in multi‑line string / paren, etc.
-        # Conservamos lo que llevamos y dejamos que el parser/semántica lo indiquen
         pass
 
     # Añadir EOF solo para el parser (NO se contabiliza ni se muestra)
@@ -145,7 +143,7 @@ def analyze():
         print('PARSER ERROR:', e)
         return jsonify({'error': str(e)}), 400
 
-    # Con semántica
+
     # Con semántica
     if mode == 'sem':
         result = link_and_run(ast)
@@ -164,7 +162,7 @@ def analyze():
             'total_tokens': lex['total_tokens'],
             'ast': to_dict(ast),
             'semantics': [],
-            'output': result["output"] 
+            'output': result["output"]  
         })
 
 

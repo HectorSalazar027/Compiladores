@@ -40,13 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Estilo activo al botón seleccionado
             btn.classList.add(
-            "ring-2",
-            "ring-blue-500",
-            "text-blue-600",
-            "dark:text-blue-400",
-            "bg-blue-100",
-            "dark:bg-gray-800"
-        );
+                "ring-2",
+                "ring-blue-500",
+                "text-blue-600",
+                "dark:text-blue-400",
+                "bg-blue-100",
+                "dark:bg-gray-800"
+            );
 
             // Limpia resultados anteriores
             document.getElementById("output").innerHTML = "";
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTheme = localStorage.getItem('theme');
         applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
 
-                // Mostrar confirmación visual
+        // Mostrar confirmación visual
         const msg = document.createElement('div');
         msg.textContent = "¡Tema cambiado!";
         msg.className = "fixed top-5 right-5 px-4 py-2 rounded bg-green-600 text-white shadow-lg z-50 animate-bounce";
@@ -157,6 +157,7 @@ async function analyzeCode(code = null) {
             body: JSON.stringify({ code, mode: analysisMode })
         });
         const data = await resp.json();
+        console.log("DATA:", data);
         loadingDiv.classList.add("hidden");
 
         if (resp.ok) {
@@ -196,21 +197,31 @@ ${JSON.stringify(data.ast, null, 2)}
             if (analysisMode === "sem") {
                 if (data.semantics && data.semantics.length > 0) {
                     outputDiv.innerHTML += `
-            <hr class="section-divider">
-            <h2 class='text-lg font-bold mt-4 text-red-400 flex items-center gap-2'>
-    Errores Semánticos
-    <span class="tooltip text-sm opacity-70" title="Errores como variables no declaradas, uso incorrecto de 'break' o 'return'">🛈</span>
-</h2>
-
-            <ul class="list-disc pl-5 text-red-400 space-y-1 fade-in">
-                ${data.semantics.map(msg => `<li class="semantic-error-item">${msg}</li>`).join("")}
-            </ul>`;
+    <hr class="section-divider">
+    <h2 class='text-lg font-bold mt-4 text-red-400 flex items-center gap-2'>
+      Errores Semánticos
+      <span class="tooltip text-sm opacity-70"
+            title="Errores como variables no declaradas, uso incorrecto de 'break' o 'return'">🛈</span>
+    </h2>
+    <ul class="list-disc pl-5 text-red-400 space-y-1 fade-in">
+      ${data.semantics.map(msg => `<li>${msg}</li>`).join("")}
+    </ul>`;
                 } else {
                     outputDiv.innerHTML += `
-            <hr class="section-divider"><h2 class='text-lg font-bold mt-4 text-green-400 fade-in'>Sin errores semánticos <span class="tooltip" title="El código no presenta errores semánticos">🛈</span></h2>`;
+    <hr class="section-divider"><h2 class='text-lg font-bold mt-4 text-center text-green-400 fade-in'>Sin errores semánticos <span class="tooltip" title="El código no presenta errores semánticos">🛈</span></h2>`;
+                }
+
+                // 🔽 Mostrar SIEMPRE la salida si la clave existe
+                if ("output" in data) {
+                    const outText = Array.isArray(data.output)
+                        ? data.output.join("\n")
+                        : String(data.output);
+                    outputDiv.innerHTML += `<h2 class='text-lg font-bold mt-4 text-blue-300'>Salida del programa:</h2>
+                    <pre class="bg-gray-900 text-yellow-300 p-2 rounded">
+${outText || "(el programa no produjo salida)"}
+    </pre>`;
                 }
             }
-
 
 
         } else {
@@ -344,8 +355,4 @@ particlesJS("particles-js", {
     },
     "retina_detect": true
 });
-<<<<<<< HEAD
-=======
-
->>>>>>> 8cb357c29b6e35da6380808f636ab612419bfbe9
 */

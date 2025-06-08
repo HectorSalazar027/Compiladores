@@ -24,7 +24,7 @@ def to_dict(node):
     if isinstance(node, list):
         return [to_dict(n) for n in node]
 
-    # 2. Tuplas   (← NUEVO)
+    # 2. Tuplas
     if isinstance(node, tuple):
         return tuple(to_dict(n) for n in node)
 
@@ -52,6 +52,7 @@ TOKEN_MAP = {
     'ENDMARKER' : None,
     # El token "OP" se especializa más abajo a OPERATOR o PUNCTUATION
     'OP'        : 'OPERATOR',
+    
 }
 
 # Conjunto de caracteres que tratamos como puntuación (no operadores aritméticos)
@@ -145,23 +146,25 @@ def analyze():
         return jsonify({'error': str(e)}), 400
 
     # Con semántica
+    # Con semántica
     if mode == 'sem':
         result = link_and_run(ast)
         if "errors" in result:
             return jsonify({
-                'tokens'      : lex['tokens'],
-                'counts'      : lex['counts'],
+                'tokens': lex['tokens'],
+                'counts': lex['counts'],
                 'total_tokens': lex['total_tokens'],
-                'ast'         : to_dict(ast),
-                'semantics'   : result["errors"]
+                'ast': to_dict(ast),
+                'semantics': result["errors"],
+                'output': result.get("output", []),
             })
         return jsonify({
-            'tokens'      : lex['tokens'],
-            'counts'      : lex['counts'],
+            'tokens': lex['tokens'],
+            'counts': lex['counts'],
             'total_tokens': lex['total_tokens'],
-            'ast'         : to_dict(ast),
-            'semantics'   : [],
-            'output'      : result["output"]
+            'ast': to_dict(ast),
+            'semantics': [],
+            'output': result["output"] 
         })
 
 

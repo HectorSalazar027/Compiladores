@@ -186,20 +186,56 @@ document.getElementById("fileInput")
 
 function loadExample() {
     if (analysisMode === "asm") {
-        document.getElementById("codeInput").value =
-`; Programa ejemplo ensamblador
-MOV R1, 5
-MOV R2, 10
-CMP R1, R2
-JNE DIFERENTE
-PRINT R1
-JMP FIN
+        const ejemplos = [
+`MOV A, 5
+MOV B, 10
+CMP A, B
+JNE DIF
+PRINT A
+JMP END
 
-DIFERENTE:
-PRINT R2
+DIF:
+PRINT B
 
-FIN:
-PRINT 999`;
+END:
+HALT`,
+
+`MOV D, 3
+MOV E, 4
+ADD D, E
+PRINT D
+SUB D, E
+PRINT D
+MUL D, E
+PRINT D
+DIV D, E
+PRINT D`,
+
+`MOV A, 6
+MOV B, 3
+AND A, B
+PRINT A
+NOT B
+PRINT B`,
+
+`MOV HL, 1234
+PRINT HL
+MOV SP, 4096
+PRINT SP`,
+
+`MOV C, 42
+HALT
+PRINT C`,
+
+`; Operación inválida esperada (para test de errores)
+MOV A, BC`,
+
+`; Salto a etiqueta no existente
+JMP NO_EXISTE`
+        ];
+
+        const random = Math.floor(Math.random() * ejemplos.length);
+        document.getElementById("codeInput").value = ejemplos[random];
     } else {
         document.getElementById("codeInput").value =
 `def suma(a, b):
@@ -208,6 +244,7 @@ PRINT 999`;
 print(suma(5, 10))`;
     }
 }
+
 
 
 //Descomentar el de abajo si quieres ver la cara de Solano

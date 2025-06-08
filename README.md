@@ -132,14 +132,6 @@ print(suma(5, 10))
 
 ---
 
-## 📜 Requisitos Técnicos
-
-- **Python** 3.6+
-- **Flask** + **flask-cors**
-- Navegador moderno (Chrome, Firefox, etc.)
-
----
-
 ## 👨‍💻 Autores
 
 - [Héctor Salazar](https://github.com/HectorSalazar027)

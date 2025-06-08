@@ -157,8 +157,16 @@ async function analyzeCode(code = null) {
             body: JSON.stringify({ code, mode: analysisMode })
         });
         const data = await resp.json();
-        console.log("DATA:", data);
         loadingDiv.classList.add("hidden");
+
+        if (!resp.ok) {
+            outputDiv.innerHTML =
+                `<div class='text-red-500'>
+           <h2 class='font-bold mb-1'>Ocurrió un error durante el análisis</h2>
+           <p>${traducirError(data.error)}</p>
+         </div>`;
+            return;  // <- ¡IMPORTANTE!
+        }
 
         if (resp.ok) {
             if (analysisMode === "asm") {

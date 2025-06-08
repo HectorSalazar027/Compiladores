@@ -8,6 +8,11 @@
 
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class'
+    };
+    </script>
 
     <style>
         html,
@@ -64,7 +69,7 @@
             <header class="text-center bg-white/90 dark:bg-gray-900/90 backdrop-blur pt-6 pb-6 mb-10">
 
                 <div class="max-w-4xl mx-auto px-4">
-                    <h1 class="text-4xl font-extrabold">Análisis de un Compilador</h1>
+                    <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white">Análisis de un Compilador</h1>
                     <p class="text-gray-500 dark:text-gray-400">Selecciona el tipo de análisis y pega tu código ✨</p>
                 </div>
             </header>
@@ -75,7 +80,7 @@
                 <!-- Selector de análisis -->
                 <div class="flex justify-center gap-2">
                     <button id="btnLex"
-                        class="mode-btn px-4 py-2 rounded-md font-medium ring-2 ring-blue-500 text-blue-500 bg-white dark:bg-gray-900 dark:text-blue-400"
+                        class="mode-btn px-4 py-2 rounded-md font-medium"
                         data-mode="lex">Sólo Léxico</button>
                     <button id="btnFull"
                         class="mode-btn px-4 py-2 rounded-md font-medium hover:ring-2 hover:ring-blue-500"

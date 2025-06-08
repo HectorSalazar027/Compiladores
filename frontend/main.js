@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', 'dark');
             themeBtn.textContent = '🌑 Tema';
         }
+
+        updateParticlesColor(mode);
     }
 
     document.querySelectorAll(".mode-btn").forEach(btn => {
@@ -22,11 +24,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Resetear estilos de todos los botones
             document.querySelectorAll(".mode-btn").forEach(b => {
-                b.classList.remove("ring-2", "text-blue-500", "dark:text-blue-400", "bg-white");
+                b.classList.remove(
+                    "ring-2",
+                    "ring-blue-500",
+                    "text-blue-500",
+                    "text-blue-600",
+                    "dark:text-blue-400",
+                    "bg-white",
+                    "bg-gray-900",
+                    "dark:bg-gray-900",
+                    "bg-blue-100",
+                    "dark:bg-gray-800"
+                );
             });
 
             // Estilo activo al botón seleccionado
-            btn.classList.add("ring-2", "text-blue-500", "dark:text-blue-400", "bg-white");
+            btn.classList.add(
+            "ring-2",
+            "ring-blue-500",
+            "text-blue-600",
+            "dark:text-blue-400",
+            "bg-blue-100",
+            "dark:bg-gray-800"
+        );
 
             // Limpia resultados anteriores
             document.getElementById("output").innerHTML = "";
@@ -39,7 +59,21 @@ document.addEventListener('DOMContentLoaded', () => {
     themeBtn.addEventListener('click', () => {
         const currentTheme = localStorage.getItem('theme');
         applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+
+                // Mostrar confirmación visual
+        const msg = document.createElement('div');
+        msg.textContent = "¡Tema cambiado!";
+        msg.className = "fixed top-5 right-5 px-4 py-2 rounded bg-green-600 text-white shadow-lg z-50 animate-bounce";
+        document.body.appendChild(msg);
+
+        setTimeout(() => msg.remove(), 1500);
+
+        const oldMsg = document.getElementById("theme-msg");
+        if (oldMsg) oldMsg.remove();
+        msg.id = "theme-msg";
+
     });
+
 
     // Eventos para los botones
     document.getElementById("analyzeBtn").addEventListener("click", () => {
@@ -95,6 +129,17 @@ function traducirError(msg) {
     }
     return `Detalle técnico: ${msg}`;
 }
+
+function updateParticlesColor(theme) {
+    const color = theme === 'dark' ? '#ffffff' : '#1f2937'; // blanco u oscuro
+    if (window.pJSDom && window.pJSDom.length > 0) {
+        const pJS = window.pJSDom[0].pJS;
+        pJS.particles.color.value = color;
+        pJS.particles.line_linked.color = color;
+        pJS.fn.particlesRefresh();
+    }
+}
+
 
 async function analyzeCode(code = null) {
     if (!code) code = document.getElementById("codeInput").value;

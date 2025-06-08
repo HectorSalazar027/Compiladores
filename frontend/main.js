@@ -217,7 +217,7 @@ ${JSON.stringify(data.ast, null, 2)}
                         ? data.output.join("\n")
                         : String(data.output);
                     outputDiv.innerHTML += `<h2 class='text-lg font-bold mt-4 text-blue-300'>Salida del programa:</h2>
-                    <pre class="bg-gray-900 text-yellow-300 p-2 rounded">
+<pre class="bg-gray-900 text-yellow-300 p-2 rounded">
 ${outText || "(el programa no produjo salida)"}
     </pre>`;
                 }

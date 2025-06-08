@@ -260,107 +260,61 @@ document.getElementById("fileInput")
         reader.readAsText(file);
     });
 
-function loadExample() {
-    if (analysisMode === "asm") {
-        const ejemplos = [
-            `MOV A, 5
-MOV B, 10
-CMP A, B
-JNE DIF
-PRINT A
-JMP END
+    
+    function loadExample() {
+    const ejemplosAsm = [
+        { titulo: "Comparación y salto condicional", codigo: `MOV A, 5\nMOV B, 10\nCMP A, B\nJNE DIF\nPRINT A\nJMP END\n\nDIF:\nPRINT B\n\nEND:\nHALT` },
+        { titulo: "Aritmética: ADD, SUB, MUL, DIV", codigo: `MOV D, 3\nMOV E, 4\nADD D, E\nPRINT D\nSUB D, E\nPRINT D\nMUL D, E\nPRINT D\nDIV D, E\nPRINT D` },
+        { titulo: "Operadores lógicos: AND y NOT", codigo: `MOV A, 6\nMOV B, 3\nAND A, B\nPRINT A\nNOT B\nPRINT B` },
+        { titulo: "Registros HL y SP", codigo: `MOV HL, 1234\nPRINT HL\nMOV SP, 4096\nPRINT SP` },
+        { titulo: "HALT con código posterior", codigo: `MOV C, 42\nHALT\nPRINT C` },
+        { titulo: "Error: operación inválida", codigo: `; Operación inválida esperada (para test de errores)\nMOV A, BC` },
+        { titulo: "Error: salto a etiqueta no existente", codigo: `; Salto a etiqueta no existente\nJMP NO_EXISTE` }
+    ];
 
-DIF:
-PRINT B
+    const ejemplosPy = [
+        { titulo: "Condicional if-elif-else", codigo: `edad = 18\n\nnota = 7\n\nif nota >= 9:\n    print("Excelente")\nelif nota >= 6:\n    print("Aprobado. Apruebeme Rene con 10 por fa")\nelse:\n    print("Reprobado")` },
+        { titulo: "Condicional con and", codigo: `edad = 20\ntiene_ine = True\n\nif edad >= 18 and tiene_ine:\n    print("Puedes votar")` },
+        { titulo: "Bucle while", codigo: `contador = 1\nwhile contador <= 5:\n    print("Contando:",contador")\n    contador += 1` },
+        { titulo: "Lista + for + append", codigo: `frutas = ["manzana", "banana", "cereza"]\nfrutas.append("naranja")\n\nfor fruta in frutas:\n    print(fruta)` },
+        { titulo: "Uso de len()", codigo: `colores = ["rojo", "azul", "verde"]\nprint("Número de colores:", len(colores))\nprint(colores)` },
+        { titulo: "Función que suma 1", codigo: `def sumar(a):\n    return a + 1` },
+        { titulo: "Asignación y suma", codigo: `x = 5\ny = x + 2\n\nprint(x)\nprint(y)` }
+    ];
 
-END:
-HALT`,
+    const modal = document.getElementById("exampleModal");
+    const content = document.getElementById("exampleContent");
+    const optionsContainer = document.getElementById("exampleOptions");
+    const closeModalBtn = document.getElementById("closeModal");
 
-            `MOV D, 3
-MOV E, 4
-ADD D, E
-PRINT D
-SUB D, E
-PRINT D
-MUL D, E
-PRINT D
-DIV D, E
-PRINT D`,
+    // Limpiar opciones previas
+    optionsContainer.innerHTML = "";
 
-            `MOV A, 6
-MOV B, 3
-AND A, B
-PRINT A
-NOT B
-PRINT B`,
+    const ejemplos = analysisMode === "asm" ? ejemplosAsm : ejemplosPy;
 
-            `MOV HL, 1234
-PRINT HL
-MOV SP, 4096
-PRINT SP`,
+    ejemplos.forEach((ejemplo, index) => {
+        const btn = document.createElement("button");
+        btn.className = "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-left w-full transition-all duration-200";
+        btn.textContent = `${index + 1}. ${ejemplo.titulo}`;
+        btn.addEventListener("click", () => {
+            document.getElementById("codeInput").value = ejemplo.codigo;
+            modal.classList.add("hidden");
+            modal.classList.remove("show");
+        });
+        optionsContainer.appendChild(btn);
+    });
 
-            `MOV C, 42
-HALT
-PRINT C`,
+    // Mostrar modal con animación
+    modal.classList.remove("hidden");
+    setTimeout(() => modal.classList.add("show"), 10); // retraso para permitir transición
 
-            `; Operación inválida esperada (para test de errores)
-MOV A, BC`,
-
-            `; Salto a etiqueta no existente
-JMP NO_EXISTE`
-        ];
-
-        const random = Math.floor(Math.random() * ejemplos.length);
-        document.getElementById("codeInput").value = ejemplos[random];
-    } else {
-        document.getElementById("codeInput").value =
-            `def suma(a, b):
-    return a + b
-
-print(suma(5, 10))`;
-    }
+    // Cerrar modal
+    closeModalBtn.onclick = () => {
+        modal.classList.remove("show");
+        setTimeout(() => modal.classList.add("hidden"), 300); // espera a que termine la animación
+    };
 }
 
-
-
-//Descomentar el de abajo si quieres ver la cara de Solano
-
-
+// Estas son las partículas para que se vea más agradable y tenga vida la página
 particlesJS("particles-js",
     { "particles": { "number": { "value": 80, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 }, "image": { "src": "img/github.svg", "width": 100, "height": 100 } }, "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } }, "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 }, "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } } }, "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 400, "line_linked": { "opacity": 1 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } } }, "retina_detect": true }); var count_particles, stats, update; stats = new Stats; stats.setMode(0); stats.domElement.style.position = 'absolute'; stats.domElement.style.left = '0px'; stats.domElement.style.top = '0px'; document.body.appendChild(stats.domElement); count_particles = document.querySelector('.js-count-particles'); update = function () { stats.begin(); stats.end(); if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) { count_particles.innerText = window.pJSDom[0].pJS.particles.array.length; } requestAnimationFrame(update); }; requestAnimationFrame(update);;
-
-/*
-
-particlesJS("particles-js", {
-    "particles": {
-        "number": { "value": 30, "density": { "enable": true, "value_area": 800 } },
-        "color": { "value": "#ffffff" },
-        "shape": {
-            "type": "image",
-            "stroke": { "width": 0, "color": "#000000" },
-            "polygon": { "nb_sides": 5 },
-            "image": { "src": "./images/Solano.jpg", "width": 100, "height": 100 }
-        },
-        "opacity": { "value": 0.4, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0, "sync": false } },
-        "size": { "value": 90, "random": true, "anim": { "enable": false, "speed": 0.2, "size_min": 0.3, "sync": false } },
-        "line_linked": { "enable": true, "distance": 4.1, "color": "#ffffff", "opacity": 0.64, "width": 1 },
-        "move": { "enable": true, "speed": 2.3, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
-    },
-    "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-            "onhover": { "enable": true, "mode": "repulse" },
-            "onclick": { "enable": true, "mode": "repulse" },
-            "resize": true
-        },
-        "modes": {
-            "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
-            "bubble": { "distance": 250, "size": 0, "duration": 2, "opacity": 0, "speed": 3 },
-            "repulse": { "distance": 200, "duration": 0.2 },
-            "push": { "particles_nb": 4 },
-            "remove": { "particles_nb": 2 }
-        }
-    },
-    "retina_detect": true
-});
-*/

@@ -2,6 +2,13 @@
 <html lang="es">
 
 <head>
+    <style>
+        #exampleModal.show #exampleContent {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    </style>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Analizador Léxico & Sintáctico</title>
@@ -9,9 +16,9 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        darkMode: 'class'
-    };
+        tailwind.config = {
+            darkMode: 'class'
+        };
     </script>
 
     <style>
@@ -79,9 +86,8 @@
                 class="relative z-20 flex-grow w-full max-w-4xl mx-auto rounded-2xl shadow-lg p-6 space-y-6 bg-white/90 dark:bg-gray-800/80 backdrop-blur">
                 <!-- Selector de análisis -->
                 <div class="flex justify-center gap-2">
-                    <button id="btnLex"
-                        class="mode-btn px-4 py-2 rounded-md font-medium"
-                        data-mode="lex">Sólo Léxico</button>
+                    <button id="btnLex" class="mode-btn px-4 py-2 rounded-md font-medium" data-mode="lex">Sólo
+                        Léxico</button>
                     <button id="btnFull"
                         class="mode-btn px-4 py-2 rounded-md font-medium hover:ring-2 hover:ring-blue-500"
                         data-mode="full">Léxico + Sintaxis</button>
@@ -222,6 +228,21 @@
 
 
         </div>
+
+
+        <!-- Modal de selección de ejemplo -->
+        <div id="exampleModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+            <div id="exampleContent"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl max-w-md w-full space-y-4 shadow-2xl transform scale-95 opacity-0 transition-all duration-300 ease-out translate-y-8">
+                <h2 class="text-lg font-bold text-center text-gray-900 dark:text-white">Selecciona un ejemplo</h2>
+                <div id="exampleOptions" class="grid grid-cols-1 gap-2 text-sm">
+                    <!-- Botones se insertan dinámicamente -->
+                </div>
+                <button id="closeModal"
+                    class="w-full py-2 mt-2 bg-red-500 hover:bg-red-600 text-white rounded-lg">Cancelar</button>
+            </div>
+        </div>
+
 
 
 

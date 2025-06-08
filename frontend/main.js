@@ -140,21 +140,33 @@ async function analyzeCode(code = null) {
 
             outputDiv.innerHTML += `<p class="mt-2"><strong>Total de tokens:</strong> ${data.total_tokens}</p>`;
 
-            if (analysisMode === "full" || analysisMode === "sem") {
-                outputDiv.innerHTML +=
-                    `<h2 class='text-lg font-bold mt-4'>Árbol de Sintaxis (AST):</h2>
-<pre class="whitespace-pre text-green-300 bg-gray-900 p-2 rounded">
+            if ((analysisMode === "full") || (analysisMode === "sem" && (!data.semantics || data.semantics.length === 0))) {
+                outputDiv.innerHTML += `
+        <hr class="section-divider"> <h2 class='text-lg font-bold text-center mt-4 leading-tight'>Árbol de Sintaxis (AST) <span class="tooltip text-xs align-middle opacity-70 ml-1" title="Representación jerárquica del código fuente">🛈</span></h2>
+        <pre class="whitespace-pre text-green-300 bg-gray-900 p-2 rounded fade-in">
 ${JSON.stringify(data.ast, null, 2)}
-</pre>`;
+        </pre>`;
             }
 
-            if (analysisMode === "sem" && data.semantics) {
-                outputDiv.innerHTML +=
-                    `<h2 class='text-lg font-bold mt-4 text-red-400'>Errores Semánticos:</h2>
-<ul class="list-disc pl-5 text-red-400">` +
-                    data.semantics.map(msg => `<li>${msg}</li>`).join("") +
-                    `</ul>`;
+            if (analysisMode === "sem") {
+                if (data.semantics && data.semantics.length > 0) {
+                    outputDiv.innerHTML += `
+            <hr class="section-divider">
+            <h2 class='text-lg font-bold mt-4 text-red-400 flex items-center gap-2'>
+    Errores Semánticos
+    <span class="tooltip text-sm opacity-70" title="Errores como variables no declaradas, uso incorrecto de 'break' o 'return'">🛈</span>
+</h2>
+
+            <ul class="list-disc pl-5 text-red-400 space-y-1 fade-in">
+                ${data.semantics.map(msg => `<li class="semantic-error-item">${msg}</li>`).join("")}
+            </ul>`;
+                } else {
+                    outputDiv.innerHTML += `
+            <hr class="section-divider"><h2 class='text-lg font-bold mt-4 text-green-400 fade-in'>Sin errores semánticos <span class="tooltip" title="El código no presenta errores semánticos">🛈</span></h2>`;
+                }
             }
+
+
 
         } else {
             outputDiv.innerHTML =
@@ -187,7 +199,7 @@ document.getElementById("fileInput")
 function loadExample() {
     if (analysisMode === "asm") {
         const ejemplos = [
-`MOV A, 5
+            `MOV A, 5
 MOV B, 10
 CMP A, B
 JNE DIF
@@ -200,7 +212,7 @@ PRINT B
 END:
 HALT`,
 
-`MOV D, 3
+            `MOV D, 3
 MOV E, 4
 ADD D, E
 PRINT D
@@ -211,26 +223,26 @@ PRINT D
 DIV D, E
 PRINT D`,
 
-`MOV A, 6
+            `MOV A, 6
 MOV B, 3
 AND A, B
 PRINT A
 NOT B
 PRINT B`,
 
-`MOV HL, 1234
+            `MOV HL, 1234
 PRINT HL
 MOV SP, 4096
 PRINT SP`,
 
-`MOV C, 42
+            `MOV C, 42
 HALT
 PRINT C`,
 
-`; Operación inválida esperada (para test de errores)
+            `; Operación inválida esperada (para test de errores)
 MOV A, BC`,
 
-`; Salto a etiqueta no existente
+            `; Salto a etiqueta no existente
 JMP NO_EXISTE`
         ];
 
@@ -238,7 +250,7 @@ JMP NO_EXISTE`
         document.getElementById("codeInput").value = ejemplos[random];
     } else {
         document.getElementById("codeInput").value =
-`def suma(a, b):
+            `def suma(a, b):
     return a + b
 
 print(suma(5, 10))`;
@@ -250,8 +262,8 @@ print(suma(5, 10))`;
 //Descomentar el de abajo si quieres ver la cara de Solano
 
 
-particlesJS("particles-js", 
-    {"particles":{"number":{"value":80,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"shape":{"type":"circle","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":0.5,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":3,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":6,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"repulse"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":400,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true});var count_particles, stats, update; stats = new Stats; stats.setMode(0); stats.domElement.style.position = 'absolute'; stats.domElement.style.left = '0px'; stats.domElement.style.top = '0px'; document.body.appendChild(stats.domElement); count_particles = document.querySelector('.js-count-particles'); update = function() { stats.begin(); stats.end(); if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) { count_particles.innerText = window.pJSDom[0].pJS.particles.array.length; } requestAnimationFrame(update); }; requestAnimationFrame(update);;
+particlesJS("particles-js",
+    { "particles": { "number": { "value": 80, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 }, "image": { "src": "img/github.svg", "width": 100, "height": 100 } }, "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } }, "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 }, "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } } }, "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 400, "line_linked": { "opacity": 1 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } } }, "retina_detect": true }); var count_particles, stats, update; stats = new Stats; stats.setMode(0); stats.domElement.style.position = 'absolute'; stats.domElement.style.left = '0px'; stats.domElement.style.top = '0px'; document.body.appendChild(stats.domElement); count_particles = document.querySelector('.js-count-particles'); update = function () { stats.begin(); stats.end(); if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) { count_particles.innerText = window.pJSDom[0].pJS.particles.array.length; } requestAnimationFrame(update); }; requestAnimationFrame(update);;
 
 /*
 

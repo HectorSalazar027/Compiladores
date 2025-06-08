@@ -8,6 +8,8 @@ from io import BytesIO
 from parser import Parser
 from semantic import SemanticAnalyzer
 from assembler import SimpleAssembler
+from semantic import link_and_run
+
 
 app = Flask(__name__)
 CORS(app)
@@ -144,15 +146,24 @@ def analyze():
 
     # Con semántica
     if mode == 'sem':
-        analyzer = SemanticAnalyzer()
-        errors = analyzer.analyze(ast)
+        result = link_and_run(ast)
+        if "errors" in result:
+            return jsonify({
+                'tokens'      : lex['tokens'],
+                'counts'      : lex['counts'],
+                'total_tokens': lex['total_tokens'],
+                'ast'         : to_dict(ast),
+                'semantics'   : result["errors"]
+            })
         return jsonify({
             'tokens'      : lex['tokens'],
             'counts'      : lex['counts'],
             'total_tokens': lex['total_tokens'],
             'ast'         : to_dict(ast),
-            'semantics'   : errors
+            'semantics'   : [],
+            'output'      : result["output"]
         })
+
 
     # AST sin semántica
     if mode == 'full':

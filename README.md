@@ -1,18 +1,19 @@
-# 🧠 Analizador Léxico y Sintáctico Interactivo
+# 🧠 Analizador Léxico, Sintáctico y Semántico Interactivo
 
-Este proyecto proporciona un **analizador léxico y sintáctico interactivo** con interfaz web. Permite reconocer y clasificar tokens de código Python, así como construir un árbol de sintaxis abstracta (AST). Es accesible desde la línea de comandos o a través de una interfaz moderna con soporte de temas claro/oscuro.
+Este proyecto implementa un **analizador léxico, sintáctico y semántico interactivo**, complementado con un **linker/interpreter** y soporte opcional para modo ensamblador. Está diseñado siguiendo principios de arquitectura modular, con una interfaz web moderna y clara, y un backend basado en Flask.
+
+El sistema permite validar, interpretar y ejecutar fragmentos de código fuente en un subconjunto de Python, y también ejecutar instrucciones de ensamblador personalizadas.
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
+unam.fi.compilers.g5.XX/
 ├── backend
-│   ├── Lexer_Analyzer.py           # Analizador léxico (línea de comandos)
+│   ├── assembler.py                # Modo ensamblador personalizado
 │   ├── parser.py                   # Parser con generación de AST
 │   ├── server.py                   # API Flask (léxico y sintaxis)
-│   ├── IniciarSesion.py            # Módulo adicional (sesión)
-│   ├── GeneradorDeContraseñas.py   # Módulo adicional (contraseñas)
 │   └── __pycache__/                # Archivos compilados por Python
 │
 ├── frontend
@@ -20,7 +21,6 @@ Este proyecto proporciona un **analizador léxico y sintáctico interactivo** co
 │   │   └── styles.css              # Estilos personalizados
 │   ├── images
 │   │   ├── github.png              # Ícono GitHub
-│   │   └── Solano.jpg              # Imagen decorativa
 │   ├── js
 │   │   ├── main.js                 # Lógica de la interfaz
 │   │   └── particles.min.js        # Efecto visual de partículas
@@ -30,64 +30,6 @@ Este proyecto proporciona un **analizador léxico y sintáctico interactivo** co
 ```
 
 ---
-
-## 🚀 Cómo Ejecutar
-
-### Opción 1: Consola (sólo léxico)
-
-```bash
-python backend/Lexer_Analyzer.py archivo.py
-```
-
-### Opción 2: Interfaz Web (léxico + sintaxis)
-
-1. **Instalar dependencias**:
-
-```bash
-pip install flask flask-cors
-```
-
-2. **Ejecutar servidor backend**:
-
-```bash
-python backend/server.py
-```
-
-3. **Abrir la interfaz**:
-
-Abre `frontend/index.html` en tu navegador.
-
----
-
-## ⚙️ ¿Cómo Funciona?
-
-- El usuario ingresa o carga código fuente en Python.
-- El backend lo procesa con expresiones regulares para análisis léxico.
-- Si se elige modo *Léxico + Sintaxis*, se genera un árbol de sintaxis abstracta (AST).
-- El resultado se muestra en la interfaz, junto con botones para copiar, limpiar o descargar.
-
----
-
-## 🧪 Funcionalidades
-
-- **Análisis Léxico**:
-  - Reconocimiento de: `KEYWORD`, `LITERAL`, `CONSTANT`, `IDENTIFIER`, `OPERATOR`, `PUNCTUATION`
-- **Análisis Sintáctico**:
-  - Construcción del AST con nodos: funciones, ciclos, condiciones, expresiones, llamadas de funciones, listas
-- **Soporte de estructuras de control extendidas:**
-  - Definiciones: import (con alias), def, class
-  - Sentencias de control: if/elif/else, while, for‑in, try/except, pass, return
-  - Estructuras de datos: lista, tupla, diccionario
-  - Operadores compuestos: +=, -=, *=, /=, etc.
-  - Programación orientada a objetos: instanciación y llamada a métodos simples
-  - Uso de in tanto en bucles como en expresiones condicionales
-- **Interfaz Web**:
-  - Tema claro/oscuro
-  - Soporte para carga de archivos `.py`, `.js`, `.cpp`, `.txt`
-  - Ejemplo precargado
-
----
-
 ## 🛠 Requisitos
 
 ### Python
@@ -105,19 +47,103 @@ pip install flask flask-cors
 
 ---
 
-## 🧠 Detalles Técnicos
+## 🚀 Cómo Ejecutar
 
-- El **analizador léxico** usa expresiones regulares para clasificar los tokens.
-- El **parser** aplica reglas gramaticales simples para formar el árbol de sintaxis (AST), con clases específicas para nodos como `FunctionNode`, `WhileNode`, `IfNode`, etc.
-- El código fuente es transformado en una lista de tokens y luego procesado secuencialmente para construir estructuras anidadas.
-- La interfaz está construida con HTML + TailwindCSS, y usa JavaScript moderno (`fetch`, `FileReader`, `Blob`, etc.).
+1. **Instalar dependencias**:
+
+```bash
+pip install flask flask-cors
+```
+
+2. **Ejecutar servidor backend**:
+
+```bash
+python backend/server.py
+```
+
+3. **Abrir la interfaz**:
+
+Abre `frontend/index.html` en tu navegador.
+
 
 ---
 
-## 👨‍💻 Colaboradores
+## 💡 Modos de Análisis Soportados
+
+### ✅ Léxico
+- Clasificación de tokens: `KEYWORD`, `IDENTIFIER`, `CONSTANT`, `LITERAL`, `OPERATOR`, `PUNCTUATION`
+
+### ✅ Léxico + Sintaxis
+- Generación de AST con nodos: `FunctionNode`, `WhileNode`, `IfNode`, `ForNode`, `TryNode`, etc.
+- **Análisis Sintáctico**:
+  - Construcción del AST con nodos: funciones, ciclos, condiciones, expresiones, llamadas de funciones, listas
+- **Soporte de estructuras de control extendidas:**
+  - Definiciones: import (con alias), def, class
+  - Sentencias de control: if/elif/else, while, for‑in, try/except, pass, return
+  - Estructuras de datos: lista, tupla, diccionario
+  - Operadores compuestos: +=, -=, *=, /=, etc.
+  - Programación orientada a objetos: instanciación y llamada a métodos simples
+  - Uso de in tanto en bucles como en expresiones condicionales
+
+### ✅ Léxico + Sintaxis + Semántico (con ejecución)
+- **Análisis semántico completo**:
+  - Detección de errores: variables no declaradas, `break`/`return` mal ubicados, clases duplicadas, etc.
+- **Linker**: ejecuta el AST si no hay errores semánticos.
+  - Simula la ejecución del código con una salida `output` como resultado.
+
+### ✅ Ensamblador (extra)
+- Instrucciones personalizadas como: `MOV`, `ADD`, `CMP`, `JMP`, `PRINT`, `HALT`
+- Ejecución directa sin parser ni AST.
+- Uso de registros simulados.
+
+---
+
+## 🧠 Ejemplo de Uso
+
+```python
+def suma(a, b):
+    return a + b
+
+print(suma(5, 10))
+```
+
+> En modo *Léxico + Sintaxis + Semántico*, se mostrará el AST, se validará semánticamente y se mostrará el resultado de la ejecución: `15`.
+
+---
+
+## ✨ Funcionalidades Adicionales 
+
+- **Interfaz Web**
+  - 🌗 **Tema claro/oscuro**
+  - 📂 **Carga de archivos** `.py`, `.js`, `.cpp`, `.txt`
+  - 🧠 **Interfaz intuitiva** con visualización progresiva de tokens, AST y errores
+- 🧪 **Validaciones semánticas avanzadas**
+- 📦 **Arquitectura modular con orientación a objetos**
+- ⚠️ **Manejo de errores semánticos con mensajes claros**
+
+---
+
+## 📦 Buenas Prácticas
+
+- Código dividido por capas: `parser`, `semantic`, `assembler`, `server`
+- Uso de **clases y TDAs** (`NodeVisitor`, `Interpreter`, `SemanticAnalyzer`)
+- Interfaz desacoplada del backend (consume API vía `fetch`)
+- Incluye ejemplos automáticos y mensajes de ayuda
+
+---
+
+## 📜 Requisitos Técnicos
+
+- **Python** 3.6+
+- **Flask** + **flask-cors**
+- Navegador moderno (Chrome, Firefox, etc.)
+
+---
+
+## 👨‍💻 Autores
 
 - [Héctor Salazar](https://github.com/HectorSalazar027)
-- [Josue Elizalde](https://github.com/JosJim275)
-- [Santiago Medina](https://github.com/sntg-mdn)
-- [David Tavera](https://github.com/DavidT328)
 - [Jesus Tenorio](https://github.com/JysusAle)
+
+---
+

@@ -12,10 +12,10 @@
 
 | Account Number | Last Name | Middle Name | First Name(s) |
 | -------------- | --------- | ----------- | ------------- |
-| 320034489 | Juárez  | Elizalde | Josue |
-| 320007354 | Medina  | Guzmán   | Santiago |
-| 320064531 | Tavera  | Castillo | David Emmanuel |
-| 320781066 | Tenorio | Martínez | Jesús Alejandro |
+| 320334489 | Juárez  | Elizalde | Josue |
+| 320067354 | Medina  | Guzmán   | Santiago |
+| 320054831 | Tavera  | Castillo | David Emmanuel |
+| 320218666 | Tenorio | Martínez | Jesús Alejandro |
 | 117004023 | Salazar | Rubi     | Héctor Manuel |
 
 **Semester 2025‑2**
@@ -31,15 +31,11 @@ This project implements a complete compiler system, comprising a lexical analyze
 
 ## 🎯 Problem Statement
 
-The task is to build a compiler capable of:
-- Reading and analyzing source code through multiple compilation stages.
-- Supporting fundamental constructs: conditional statements, loops, function definitions, class declarations, and arithmetic/logical operations.
-- Simulating execution via an assembler.
-- Exposing all functionalities via a web server.
+We were asked to create a compiler. This tool should be able to read a source code file, analyze it through different compilation stages, and execute it. The compiler must sup- port basic constructs such as if statements, loops, function definitions, class declarations, and arithmetic/logical operations. It should include an assembler for a simplified low-level language and additionally expose all functionalities via a web server.
 
 ## 🔥 Motivation
 
-We aimed to practically apply theoretical compiler concepts learned in class, exploring language processing stages from lexical analysis to execution. Using Python, Flask, and web technologies allowed us to create an interactive, educational tool demonstrating both high-level and low-level language processing.
+We were motivated to build a compiler using Python because of its readability, flexibility, and robust support for string processing and regular expressions. Designing a custom language and its corresponding compiler allowed us to explore every major stage of language processing from lexical analysis to interpretation. Adding an assembler and a web API extended the project’s educational value, simulating both high-level and low-level program execution and enabling external integration through a user interface or frontend.
 
 ## 🎯 Objectives
 

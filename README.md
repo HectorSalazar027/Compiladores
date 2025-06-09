@@ -1,141 +1,204 @@
-# 🧠 Analizador Léxico, Sintáctico y Semántico Interactivo
+# Universidad Nacional Autónoma de México  
+*Computer Engineering*
 
-Este proyecto implementa un **analizador léxico, sintáctico y semántico interactivo**, complementado con un **linker/interpreter** y soporte opcional para modo ensamblador. Está diseñado siguiendo principios de arquitectura modular, con una interfaz web moderna y clara, y un backend basado en Flask.
+## Compilers – Group 5
 
-El sistema permite validar, interpretar y ejecutar fragmentos de código fuente en un subconjunto de Python, y también ejecutar instrucciones de ensamblador personalizadas.
+**Teacher:** M.C. René Adrián Dávila Pérez  
+**Delivery date:** June 8, 2025
+
+# Compiler
+
+**Team:** 8
+
+| Account Number | Last Name | Middle Name | First Name(s) |
+| -------------- | --------- | ----------- | ------------- |
+| 320034489 | Juárez  | Elizalde | José |
+| 320007354 | Medina  | Guzmán   | Santiago |
+| 320064531 | Tavera  | Castillo | David Emmanuel |
+| 320781066 | Tenorio | Martínez | Jesús Alejandro |
+| 117004023 | Salazar | Ruíz     | Héctor Manuel |
+
+**Semester 2025‑2**
+
 
 ---
 
-## 📁 Estructura del Proyecto
 
-```
+# 🧠 Interactive Lexical, Syntactic & Semantic Analyzer
+
+![Home page](frontend/images/Página_principal.png)
+
+An educational **compiler pipeline** that lets you explore every major stage—lexical analysis, parsing, semantic checking, interpretation, and even a *toy* assembler—through a modern web UI backed by a lightweight Flask API.
+
+> **Group 5 · UNAM Computer Engineering · Semester 2025‑2**
+
+---
+
+## 📑 Table of Contents
+1. [Project Overview](#project-overview)  
+2. [Folder Structure](#folder-structure)  
+3. [Prerequisites](#prerequisites)  
+4. [Running Locally](#running-locally)  
+5. [Supported Analysis Modes](#supported-analysis-modes)  
+6. [Theoretical Background](#theoretical-background)  
+7. [Compliance with Official PDF Guidelines](#compliance-with-official-pdf-guidelines)  
+8. [Extra‑Credit Features](#extra-credit-features)  
+9. [Best Practices Adopted](#best-practices-adopted)  
+10. [Authors](#authors)
+
+---
+
+## Project Overview
+This repository contains:
+* **`lexer` & `parser`** that build a full Abstract Syntax Tree (AST) for a Python‑like subset.  
+* **`semantic` analysis** that validates scopes, duplicates, and control‑flow misuse.  
+* **`interpreter / linker`** that executes the AST when no semantic errors are present.  
+* **`SimpleAssembler`** that executes a micro‑assembly language for low‑level insight.  
+* **Flask API** exposing all stages (`/analyze` endpoint).  
+* **Tailwind‑powered frontend** with light/dark theme, drag‑n‑drop, examples, and particle background.
+
+---
+
+## Folder Structure
+```text
 unam.fi.compilers.g5.XX/
 ├── backend
-│   ├── assembler.py                # Modo ensamblador personalizado
-│   ├── parser.py                   # Parser con generación de AST
-│   ├── server.py                   # API Flask (léxico y sintaxis)
-│   └── __pycache__/                # Archivos compilados por Python
+│   ├── assembler.py         # Toy assembler & VM
+│   ├── parser.py            # Recursive‑descent parser → AST
+│   ├── semantic.py          # Semantic analyzer & interpreter
+│   └── server.py            # Flask API (lex/syntax/semantics/asm)
 │
 ├── frontend
-│   ├── css
-│   │   └── styles.css              # Estilos personalizados
-│   ├── images
-│   │   ├── github.png              # Ícono GitHub
-│   ├── js
-│   │   ├── main.js                 # Lógica de la interfaz
-│   │   └── particles.min.js        # Efecto visual de partículas
-│   └── index.html                  # Interfaz principal de usuario
+│   ├── css/styles.css       # Tailwind overrides
+│   ├── js/main.js           # UI logic & API calls
+│   ├── images/              # Assets
+│   └── index.html           # Main interface
 │
-└── README.md                       # Documentación del proyecto
+└── README.md                # 🇲🇽 Spanish reference (legacy)
 ```
 
 ---
-## 🛠 Requisitos
 
-### Python
-- Python 3.6 o superior
-- Instalar con:
-
+## Prerequisites
+### Python ≥ 3.8
 ```bash
 pip install flask flask-cors
+# optional: python -m venv venv
 ```
 
-> También puedes crear un entorno virtual con `python -m venv venv`
-
-### Navegador
-- Cualquier navegador moderno (Chrome, Firefox, Edge)
+### Browser
+Any modern browser (Chrome / Firefox / Edge).
 
 ---
 
-## 🚀 Cómo Ejecutar
+## Running Locally
+1. **Install dependencies**
+   ```bash
+   pip install flask flask-cors
+   ```
+2. **Start the backend**
+   ```bash
+   python backend/server.py
+   ```
+3. **Open the frontend**  
+   Double‑click `frontend/index.html` or serve it with your favourite static server.
 
-1. **Instalar dependencias**:
+![How to run the server.py file](frontend/images/Ejecución.png)   
 
-```bash
-pip install flask flask-cors
+---
+
+## Supported Analysis Modes
+| Mode | What you get | Endpoint payload (`mode`) |
+|------|--------------|---------------------------|
+| **Lexical** | Token categories, counts, and unique values. | `lex` |
+| **Lexical + Syntax** | Full AST in JSON. | `full` |
+| **Lexical + Syntax + Semantic** | AST • semantic‑error list • program output. | `sem` |
+| **Assembler** | Simulated registers & output for custom mnemonics. | `asm` |
+
+---
+
+
+### 1. Compilation Phases
+ 
+* **Preloaded examples**
+![Preloaded examples](frontend/images/Ejemplos_Precargados.png)   
+
+* **Lexical Analysis** – converts raw text into *tokens* using Python’s `tokenize`, mapping them to categories (`KEYWORD`, `IDENTIFIER`, …).
+   ![Lexical Analysis](frontend/images/AnalisisLexico.png)  
+
+* **Parsing** – builds an **AST** via a hand‑written recursive‑descent parser that recognises functions, classes, control flow, data literals, and augmented assignments.
+   ![Parsing](frontend/images/parser.png)
+   ![Syntax Tree (AST)](frontend/images/parser1.png)
+* **Semantic Analysis** – traverses the AST (visitor pattern) to ensure declarations, scope, and control‑flow rules are respected.
+   ![Semantic Analysis](frontend/images/semantic.png)
+   ![Program exit](frontend/images/semantic1.png)
+* **Interpretation / Linkage** – executes the AST when semantics are valid, recording side‑effects and producing runtime **output**.
+* **Assembly Execution (Bonus)** – a *SimpleAssembler* interprets an 8/16‑bit register set with arithmetic, logic, jumps, and I/O.
+
+### 2. Execution Architecture
 ```
-
-2. **Ejecutar servidor backend**:
-
-```bash
-python backend/server.py
+   Browser  ⇆  Flask API  ⇆  Core compiler modules  ⇆  (optional) Assembler VM
 ```
-
-3. **Abrir la interfaz**:
-
-Abre `frontend/index.html` en tu navegador.
-
+*Front‑end* sends code & mode → **Flask** delegates to lex/parse/sem/asm → returns JSON → UI renders tokens, AST trees, errors, or terminal‑like output.
 
 ---
 
-## 💡 Modos de Análisis Soportados
-
-### ✅ Léxico
-- Clasificación de tokens: `KEYWORD`, `IDENTIFIER`, `CONSTANT`, `LITERAL`, `OPERATOR`, `PUNCTUATION`
-
-### ✅ Léxico + Sintaxis
-- Generación de AST con nodos: `FunctionNode`, `WhileNode`, `IfNode`, `ForNode`, `TryNode`, etc.
-- **Análisis Sintáctico**:
-  - Construcción del AST con nodos: funciones, ciclos, condiciones, expresiones, llamadas de funciones, listas
-- **Soporte de estructuras de control extendidas:**
-  - Definiciones: import (con alias), def, class
-  - Sentencias de control: if/elif/else, while, for‑in, try/except, pass, return
-  - Estructuras de datos: lista, tupla, diccionario
-  - Operadores compuestos: +=, -=, *=, /=, etc.
-  - Programación orientada a objetos: instanciación y llamada a métodos simples
-  - Uso de in tanto en bucles como en expresiones condicionales
-
-### ✅ Léxico + Sintaxis + Semántico (con ejecución)
-- **Análisis semántico completo**:
-  - Detección de errores: variables no declaradas, `break`/`return` mal ubicados, clases duplicadas, etc.
-- **Linker**: ejecuta el AST si no hay errores semánticos.
-  - Simula la ejecución del código con una salida `output` como resultado.
-
-### ✅ Ensamblador (extra)
-- Instrucciones personalizadas como: `MOV`, `ADD`, `CMP`, `JMP`, `PRINT`, `HALT`
-- Ejecución directa sin parser ni AST.
-- Uso de registros simulados.
+## Compliance with Official PDF Guidelines
+| Requirement (simplified) | Implemented? | Evidence |
+|--------------------------|--------------|----------|
+| Lexical analyzer | ✅ | `server.lexer`, `tokenize` mapping |
+| Parser generating AST | ✅ | `parser.py` classes & `Parser.parse()` |
+| Semantic analyzer | ✅ | `semantic.py::SemanticAnalyzer` |
+| Interpreter / Linker | ✅ | `semantic.py::Interpreter` & `link_and_run` |
+| Simplified Assembler | ✅ | `assembler.py::SimpleAssembler` |
+| Web server API | ✅ | `server.py` Flask routes |
+| GUI / Frontend | ✅ | `frontend/index.html`, `main.js` |
+| Documentation in PDF format | ✅ | `Compilers_Documentation.pdf` |
+| Results & Use‑case section | ✅ | *Chapter 4* of the PDF |
+| Conclusions & References | ✅ | *Ch. 5‑6* of the PDF |
 
 ---
 
-## 🧠 Ejemplo de Uso
+## Extra‑Credit Features
+| Extra point | Status | Brief note |
+|-------------|--------|------------|
+| **Data Structures** | ✅ | Custom `ASTNode` hierarchy, symbol tables (`dict`), register file (`dict`). |
+| **Error Handler** | ✅ | Lexer skips invalid tokens; SemanticAnalyzer accrues detailed error strings; UI maps technical errors to friendly Spanish. |
+| **Object‑Oriented Programming (TDA)** | ✅ | Core compiler built around classes (`Lexer`, `Parser`, `NodeVisitor`, etc.); frontend uses modular JS. |
 
-```python
-def suma(a, b):
-    return a + b
+- **Extras to consider**
 
-print(suma(5, 10))
-```
+- Change of Theme (Dark or Light)
+![Change of Theme (Dark or Light)](frontend/images/Tema.png)
 
-> En modo *Léxico + Sintaxis + Semántico*, se mostrará el AST, se validará semánticamente y se mostrará el resultado de la ejecución: `15`.
+- Assembly
+![](frontend/images/EjemplosA.png)
+![Assembler code](frontend/images/Programa1.png)
+![Program analysis and output:](frontend/images/Programa2.png)
 
----
+- Handling syntactical errors
+![Syntax error in "print"](frontend/images/ManejoError.png)
 
-## ✨ Funcionalidades Adicionales 
-
-- **Interfaz Web**
-  - 🌗 **Tema claro/oscuro**
-  - 📂 **Carga de archivos** `.py`, `.js`, `.cpp`, `.txt`
-  - 🧠 **Interfaz intuitiva** con visualización progresiva de tokens, AST y errores
-- 🧪 **Validaciones semánticas avanzadas**
-- 📦 **Arquitectura modular con orientación a objetos**
-- ⚠️ **Manejo de errores semánticos con mensajes claros**
-
----
-
-## 📦 Buenas Prácticas
-
-- Código dividido por capas: `parser`, `semantic`, `assembler`, `server`
-- Uso de **clases y TDAs** (`NodeVisitor`, `Interpreter`, `SemanticAnalyzer`)
-- Interfaz desacoplada del backend (consume API vía `fetch`)
-- Incluye ejemplos automáticos y mensajes de ayuda
+- Conditionals
+![if-else](frontend/images/Condicional.png)
+![Program Output](frontend/images/Condicional1.png)
 
 ---
 
-## 👨‍💻 Autores
-
-- [Héctor Salazar](https://github.com/HectorSalazar027)
-- [Jesus Tenorio](https://github.com/JysusAle)
+## Best Practices Adopted
+* **Layered architecture** separates UI, API, and core logic.
+* **PEP‑8** compliant code, descriptive names, docstrings.
+* Defensive programming with explicit **validation** in assembler & parser.
+* Browser‑side **theme toggle** and small visual feedback helpers.
+* Placeholder tests (see `tests/` soon) and ESLint/Tailwind config.
 
 ---
 
+## Authors
+* Héctor Salazar  
+* Jesús Tenorio  
+* Josué Elizalde  
+* Santiago Medina  
+* David Tavera  
+
+*For academic purposes only.*  

@@ -88,7 +88,7 @@ This repository contains:
 ```text
 unam.fi.compilers.g5.XX/
 ├── backend
-│   ├── assembler.py         # Toy assembler & VM
+│   ├── assembler.py         # Toy assembler 
 │   ├── parser.py            # Recursive‑descent parser → AST
 │   ├── semantic.py          # Semantic analyzer & interpreter
 │   └── server.py            # Flask API (lex/syntax/semantics/asm)
@@ -99,7 +99,7 @@ unam.fi.compilers.g5.XX/
 │   ├── images/              # Assets
 │   └── index.html           # Main interface
 │
-└── README.md                # 🇲🇽 Spanish reference (legacy)
+└── README.md                
 ```
 
 ---
@@ -146,7 +146,7 @@ Any modern browser (Chrome / Firefox / Edge).
 ### 1. Compilation Phases
  
 * **Preloaded examples**
-![Preloaded examples](unam.fi.compilers.g5.08/frontend/images/Ejemplos_Precargados.png)   
+![Preloaded examples](unam.fi.compilers.g5.08/frontend/images/Ejemplopre.png)   
 
 * **Lexical Analysis** – converts raw text into *tokens* using Python’s `tokenize`, mapping them to categories (`KEYWORD`, `IDENTIFIER`, …).
 

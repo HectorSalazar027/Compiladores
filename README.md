@@ -125,10 +125,13 @@ Any modern browser (Chrome / Firefox / Edge).
    ```bash
    python backend/server.py
    ```
+
+![How to run the server.py file](unam.fi.compilers.g5.08/frontend/images/Ejecución.png)   
+
 3. **Open the frontend**  
    Double‑click `frontend/index.html` or serve it with your favourite static server.
 
-![How to run the server.py file](unam.fi.compilers.g5.08/frontend/images/Ejecución.png)   
+
 
 ---
 

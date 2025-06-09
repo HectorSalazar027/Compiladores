@@ -176,7 +176,8 @@ Any modern browser (Chrome / Firefox / Edge).
 ---
 
 
-## 📚 Theoretical Framework
+## 📚 Brief summary of the Theoretical Framework 
+# (If you want to go deeper, please review the PDF documentation)
 
 The compiler is structured in four main phases:
 

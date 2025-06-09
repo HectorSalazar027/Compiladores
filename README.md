@@ -16,7 +16,7 @@
 | 320007354 | Medina  | Guzmán   | Santiago |
 | 320064531 | Tavera  | Castillo | David Emmanuel |
 | 320781066 | Tenorio | Martínez | Jesús Alejandro |
-| 117004023 | Salazar | Ruíz     | Héctor Manuel |
+| 117004023 | Salazar | Rubi     | Héctor Manuel |
 
 **Semester 2025‑2**
 
@@ -26,7 +26,7 @@
 
 # 🧠 Interactive Lexical, Syntactic & Semantic Analyzer
 
-![Home page](unam.fi.compilers.g5.08\frontend\images\Página_principal.png)
+![Home page](unam.fi.compilers.g5.08\frontend\images\Pagina_principal.png)
 
 An educational **compiler pipeline** that lets you explore every major stage—lexical analysis, parsing, semantic checking, interpretation, and even a *toy* assembler—through a modern web UI backed by a lightweight Flask API.
 
@@ -171,8 +171,8 @@ Any modern browser (Chrome / Firefox / Edge).
 - Change of Theme (Dark or Light)
 ![Change of Theme (Dark or Light)](frontend/images/Tema.png)
 
-- Assembly
-![](frontend/images/EjemplosA.png)
+- Based on the Z80 Assembler architecture
+![Based on the Z80 Assembler architecture](frontend/images/EjemplosA.png)
 ![Assembler code](frontend/images/Programa1.png)
 ![Program analysis and output:](frontend/images/Programa2.png)
 

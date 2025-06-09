@@ -124,14 +124,22 @@ Any modern browser (Chrome / Firefox / Edge).
 ![Preloaded examples](unam.fi.compilers.g5.08/frontend/images/Ejemplos_Precargados.png)   
 
 * **Lexical Analysis** – converts raw text into *tokens* using Python’s `tokenize`, mapping them to categories (`KEYWORD`, `IDENTIFIER`, …).
-   ![Lexical Analysis](unam.fi.compilers.g5.08/frontend/images/AnalisisLexico.png)  
+
+![Lexical Analysis](unam.fi.compilers.g5.08/frontend/images/AnalisisLexico.png)  
 
 * **Parsing** – builds an **AST** via a hand‑written recursive‑descent parser that recognises functions, classes, control flow, data literals, and augmented assignments.
-   ![Parsing](unam.fi.compilers.g5.08/frontend/images/parser.png)
-   ![Syntax Tree (AST)](unam.fi.compilers.g5.08/frontend/images/parser1.png)
+
+![Parsing](unam.fi.compilers.g5.08/frontend/images/parser.png)
+![Syntax Tree (AST)](unam.fi.compilers.g5.08/frontend/images/parser1.png)
+
 * **Semantic Analysis** – traverses the AST (visitor pattern) to ensure declarations, scope, and control‑flow rules are respected.
-   ![Semantic Analysis](unam.fi.compilers.g5.08/frontend/images/semantic.png)
-   ![Program exit](unam.fi.compilers.g5.08/frontend/images/semantic1.png)
+
+
+![Semantic Analysis](unam.fi.compilers.g5.08/frontend/images/semantic.png)
+
+![Program exit](unam.fi.compilers.g5.08/frontend/images/semantic1.png)
+
+
 * **Interpretation / Linkage** – executes the AST when semantics are valid, recording side‑effects and producing runtime **output**.
 * **Assembly Execution (Bonus)** – a *SimpleAssembler* interprets an 8/16‑bit register set with arithmetic, logic, jumps, and I/O.
 

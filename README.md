@@ -26,7 +26,7 @@
 
 # 🧠 Interactive Lexical, Syntactic & Semantic Analyzer
 
-![Home page](unam.fi.compilers.g5.08\frontend\images\Pagina_principal.png)
+![Home page](unam.fi.compilers.g5.08/frontend/images/Pagina_principal.png)
 
 An educational **compiler pipeline** that lets you explore every major stage—lexical analysis, parsing, semantic checking, interpretation, and even a *toy* assembler—through a modern web UI backed by a lightweight Flask API.
 

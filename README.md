@@ -12,7 +12,7 @@
 
 | Account Number | Last Name | Middle Name | First Name(s) |
 | -------------- | --------- | ----------- | ------------- |
-| 320034489 | Juárez  | Elizalde | José |
+| 320034489 | Juárez  | Elizalde | Josue |
 | 320007354 | Medina  | Guzmán   | Santiago |
 | 320064531 | Tavera  | Castillo | David Emmanuel |
 | 320781066 | Tenorio | Martínez | Jesús Alejandro |
@@ -23,6 +23,31 @@
 
 ---
 
+# 🚀 Compiler Project
+
+## 📖 Introduction
+
+This project implements a complete compiler system, comprising a lexical analyzer, syntax analyzer, semantic analyzer, and a simple assembler, integrated with a user-friendly web interface built using Flask and JavaScript. It provides clear visualization of each compilation phase, including tokenization, AST (Abstract Syntax Tree) construction, semantic validation, and code execution.
+
+## 🎯 Problem Statement
+
+The task is to build a compiler capable of:
+- Reading and analyzing source code through multiple compilation stages.
+- Supporting fundamental constructs: conditional statements, loops, function definitions, class declarations, and arithmetic/logical operations.
+- Simulating execution via an assembler.
+- Exposing all functionalities via a web server.
+
+## 🔥 Motivation
+
+We aimed to practically apply theoretical compiler concepts learned in class, exploring language processing stages from lexical analysis to execution. Using Python, Flask, and web technologies allowed us to create an interactive, educational tool demonstrating both high-level and low-level language processing.
+
+## 🎯 Objectives
+
+- **Lexical Analysis:** Identify and classify tokens (keywords, identifiers, literals, operators, punctuation).
+- **Syntax Analysis:** Validate grammar structures and build ASTs.
+- **Semantic Analysis:** Ensure correct usage of identifiers and constructs.
+- **Execution Server:** Interpret and execute code via Flask API.
+- **Assembler Simulation:** Execute custom assembly language instructions.
 
 # 🧠 Interactive Lexical, Syntactic & Semantic Analyzer
 
@@ -151,6 +176,37 @@ Any modern browser (Chrome / Firefox / Edge).
 
 ---
 
+
+## 📚 Theoretical Framework
+
+The compiler is structured in four main phases:
+
+### Lexical Analyzer
+- Uses Python's `tokenize` module and custom mappings for token identification.
+- Classifies tokens into categories like `KEYWORD`, `IDENTIFIER`, `CONSTANT`, `LITERAL`, `OPERATOR`, and `PUNCTUATION`.
+
+### Syntax Analyzer
+- Implements a recursive descent parser.
+- Generates an Abstract Syntax Tree (AST) representing program structure.
+- Supports functions, classes, control structures (`if`, `while`, `for`), and compound statements (`try-except`).
+
+### Semantic Analyzer
+- Traverses the AST to ensure correctness of declarations and scope.
+- Detects semantic errors such as undeclared variables, misuse of `return`, and invalid operations.
+
+### Simple Assembler
+- Simulates basic assembly instructions (`MOV`, `ADD`, `CMP`, `JMP`, `PRINT`, `HALT`).
+- Manages registers, arithmetic/logical operations, conditional jumps, and program termination.
+
+## 💻 Web Interface
+
+- Developed using HTML, CSS, and JavaScript.
+- Allows users to choose analysis modes (Lexical, Syntax, Semantic, Assembler).
+- Dynamically visualizes tokens, ASTs, semantic errors, and execution outputs.
+
+---
+
+
 ## Compliance with Official PDF Guidelines
 | Requirement (simplified) | Implemented? | Evidence |
 |--------------------------|--------------|----------|
@@ -187,6 +243,16 @@ Any modern browser (Chrome / Firefox / Edge).
 - Handling syntactical errors
 ![Syntax error in "print"](unam.fi.compilers.g5.08/frontend/images/ManejoError.png)
 
+## 🚨 Semantic Error Example
+
+```python
+return 5
+```
+
+**Produces error**: `'return' fuera de una función.`
+
+---
+
 - Conditionals
 ![if-else](unam.fi.compilers.g5.08/frontend/images/Condicional.png)
 ![Program Output](unam.fi.compilers.g5.08/frontend/images/Condicional1.png)
@@ -199,6 +265,36 @@ Any modern browser (Chrome / Firefox / Edge).
 * Defensive programming with explicit **validation** in assembler & parser.
 * Browser‑side **theme toggle** and small visual feedback helpers.
 * Placeholder tests (see `tests/` soon) and ESLint/Tailwind config.
+
+---
+
+
+## 📌 Conclusions
+
+Building this compiler reinforced our understanding of **lexical**, **syntactic**, and **semantic analysis**.  
+Python's capabilities simplified **string processing**, while **Flask** allowed seamless frontend integration.  
+The **assembler** further enriched our understanding by simulating **low-level execution**.
+
+---
+
+## 📚 References
+
+## 📚 References
+
+1. TREMBLAY, Jean-Paul, and SORENSON, Paul. *The Theory and Practice of Compiler Writing*. McGraw-Hill, 1985.  
+2. AHO, Alfred, SETHI, Ravi, and ULLMAN, Jeffrey D. *Compiladores: Principios, técnicas y herramientas*. Addison-Wesley Iberoamericana, 2000.  
+3. AHO, Alfred V., LAM, Monica S., SETHI, Ravi, and ULLMAN, Jeffrey D. *Compilers: Principles, Techniques, and Tools*. 2nd ed., Pearson Education, 2007.  
+4. WAITE, W. M., and GOOS, G. *Compiler Construction*. Springer Science & Business Media, 2012.  
+5. WIRTH, Niklaus. *Compiler Construction*. Vol. 1, Addison-Wesley, 1996.  
+6. LOUDEN, Kenneth C. *Compiler Construction: Principles and Practice*. PWS Publishing Co., 1997.  
+7. STEELE, Peter W., and TOMEK, Ivan. *Z80 Assembly Language Programming*. Computer Science Press, Inc., 1987.  
+8. ["Abstract Syntax Tree (AST) in Java"](https://www.geeksforgeeks.org/abstract-syntax-tree-ast-in-java/), GeeksforGeeks, Aug. 12, 2021.  
+9. ["Semantic Analysis in Compiler Design"](https://www.geeksforgeeks.org/semantic-analysis-in-compiler-design/), GeeksforGeeks, Apr. 22, 2020.  
+10. ["Documentation – Arm Developer"](https://developer.arm.com/documentation), Arm Developer.  
+11. ["Kotlin Programming Language"](https://kotlinlang.org/), Kotlin.  
+12. ConsoleTVs, ["VirtualMachine/src/vm.cpp at master · ConsoleTVs/VirtualMachine"](https://github.com/ConsoleTVs/VirtualMachine/blob/master/src/vm.cpp), GitHub.  
+13. ["Phases of a Compiler"](https://www.geeksforgeeks.org/phases-of-a-compiler/), GeeksforGeeks, Jan. 25, 2025.  
+
 
 ---
 

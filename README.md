@@ -103,7 +103,7 @@ Any modern browser (Chrome / Firefox / Edge).
 3. **Open the frontend**  
    Double‑click `frontend/index.html` or serve it with your favourite static server.
 
-![How to run the server.py file](frontend/images/Ejecución.png)   
+![How to run the server.py file](unam.fi.compilers.g5.08/frontend/images/Ejecución.png)   
 
 ---
 
@@ -121,17 +121,17 @@ Any modern browser (Chrome / Firefox / Edge).
 ### 1. Compilation Phases
  
 * **Preloaded examples**
-![Preloaded examples](frontend/images/Ejemplos_Precargados.png)   
+![Preloaded examples](unam.fi.compilers.g5.08/frontend/images/Ejemplos_Precargados.png)   
 
 * **Lexical Analysis** – converts raw text into *tokens* using Python’s `tokenize`, mapping them to categories (`KEYWORD`, `IDENTIFIER`, …).
-   ![Lexical Analysis](frontend/images/AnalisisLexico.png)  
+   ![Lexical Analysis](unam.fi.compilers.g5.08/frontend/images/AnalisisLexico.png)  
 
 * **Parsing** – builds an **AST** via a hand‑written recursive‑descent parser that recognises functions, classes, control flow, data literals, and augmented assignments.
-   ![Parsing](frontend/images/parser.png)
-   ![Syntax Tree (AST)](frontend/images/parser1.png)
+   ![Parsing](unam.fi.compilers.g5.08/frontend/images/parser.png)
+   ![Syntax Tree (AST)](unam.fi.compilers.g5.08/frontend/images/parser1.png)
 * **Semantic Analysis** – traverses the AST (visitor pattern) to ensure declarations, scope, and control‑flow rules are respected.
-   ![Semantic Analysis](frontend/images/semantic.png)
-   ![Program exit](frontend/images/semantic1.png)
+   ![Semantic Analysis](unam.fi.compilers.g5.08/frontend/images/semantic.png)
+   ![Program exit](unam.fi.compilers.g5.08/frontend/images/semantic1.png)
 * **Interpretation / Linkage** – executes the AST when semantics are valid, recording side‑effects and producing runtime **output**.
 * **Assembly Execution (Bonus)** – a *SimpleAssembler* interprets an 8/16‑bit register set with arithmetic, logic, jumps, and I/O.
 
@@ -169,19 +169,19 @@ Any modern browser (Chrome / Firefox / Edge).
 - **Extras to consider**
 
 - Change of Theme (Dark or Light)
-![Change of Theme (Dark or Light)](frontend/images/Tema.png)
+![Change of Theme (Dark or Light)](unam.fi.compilers.g5.08/frontend/images/Tema.png)
 
 - Based on the Z80 Assembler architecture
-![Based on the Z80 Assembler architecture](frontend/images/EjemplosA.png)
-![Assembler code](frontend/images/Programa1.png)
-![Program analysis and output:](frontend/images/Programa2.png)
+![Based on the Z80 Assembler architecture](unam.fi.compilers.g5.08/frontend/images/EjemplosA.png)
+![Assembler code](unam.fi.compilers.g5.08/frontend/images/Programa1.png)
+![Program analysis and output:](unam.fi.compilers.g5.08/frontend/images/Programa2.png)
 
 - Handling syntactical errors
-![Syntax error in "print"](frontend/images/ManejoError.png)
+![Syntax error in "print"](unam.fi.compilers.g5.08/frontend/images/ManejoError.png)
 
 - Conditionals
-![if-else](frontend/images/Condicional.png)
-![Program Output](frontend/images/Condicional1.png)
+![if-else](unam.fi.compilers.g5.08/frontend/images/Condicional.png)
+![Program Output](unam.fi.compilers.g5.08/frontend/images/Condicional1.png)
 
 ---
 
